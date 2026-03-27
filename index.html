@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeLoopin, Researcher Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Primary — purple */
+  --p:#8865FF; --p2:#A389FF; --p3:#C4B0FF;
+  --pbg:#F2EEFF; --pbd:#C4B0FF; --pd:#5E3FCC; --pdd:#3E2099;
+
+  /* Secondary — yellow */
+  --s:#FFD43B; --s2:#FFE070; --s3:#FFF0A8;
+  --sbg:#FFFAE6; --sbd:#FFE87A; --sd:#C8A000; --sdd:#8A6E00;
+
+  /* Neutrals */
+  --c6:#2C2C3A; --c5:#50505F; --c4:#808090;
+  --c3:#B8B8C8; --c2:#E0E0EC; --c1:#F4F4F8; --c0:#FFFFFF;
+
+  /* States */
+  --danger:#E53E3E; --danger-bg:#FFF5F5; --danger-bd:#FFC5C5;
+  --success:#38A169;
+
+  /* Shadows */
+  --sh-sm:0 2px 12px rgba(136,101,255,.10);
+  --sh-md:0 6px 28px rgba(136,101,255,.14);
+  --sh-lg:0 16px 56px rgba(136,101,255,.18);
+
+  --r8:8px;--r12:12px;--r16:16px;--r20:20px;--r24:24px;--rFull:9999px;
+  --font:'Nunito',sans-serif;
+  --nav-h:62px;
+
+  /* Per-category — aligned with icon bg colours */
+  --cat1p:#2E6DA4; --cat1pb:#CBDBEE; --cat1bd:#9BBDD8; --cat1tx:#1A4E7A; /* Job Readiness — blue */
+  --cat2p:#9B3DB5; --cat2pb:#FBDCF8; --cat2bd:#E4A8DC; --cat2tx:#6E2080; /* Career Traps — pink/purple */
+  --cat3p:#8A6500; --cat3pb:#FFF8E0; --cat3bd:#EDD878; --cat3tx:#5C4400; /* Career Opportunities — yellow */
+  --cat4p:#C25A1A; --cat4pb:#FED6C0; --cat4bd:#F0AA80; --cat4tx:#8A3500; /* Career Acceleration — peach/orange */
+}
+
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--c0);color:var(--c6);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--font);border:none;background:none;outline:none}
+input,textarea,select{font-family:var(--font);outline:none;color:var(--c6)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--c3);border-radius:4px}
+
+/* ── LOGO ─────────────────────────── */
+.logo{display:inline-flex;flex-direction:column;cursor:pointer;line-height:1;flex-shrink:0}
+.logo-we{font-family:'Pacifico',cursive;color:var(--p);font-size:26px;line-height:1}
+.logo-loopin{font-family:var(--font);font-weight:900;color:var(--sd);font-size:17px;letter-spacing:-.2px;line-height:1;margin-top:2px}
+.logo.md .logo-we{font-size:34px}.logo.md .logo-loopin{font-size:22px}
+.logo.lg .logo-we{font-size:50px}.logo.lg .logo-loopin{font-size:32px}
+
+/* ── BUTTONS ─────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--rFull);font-weight:800;font-size:14px;transition:all .18s;cursor:pointer;white-space:nowrap;padding:0 22px;height:42px;font-family:var(--font)}
+.btn-lg{height:50px;padding:0 28px;font-size:15px}
+.btn-sm{height:34px;padding:0 16px;font-size:13px}
+.btn-xs{height:28px;padding:0 12px;font-size:12px;font-weight:700}
+.btn-p{background:var(--p);color:#fff;box-shadow:0 3px 14px rgba(136,101,255,.30)}
+.btn-p:hover{background:var(--pd);transform:translateY(-2px);box-shadow:0 5px 22px rgba(136,101,255,.40)}
+.btn-s{background:var(--s);color:var(--c6);box-shadow:0 3px 14px rgba(255,212,59,.30)}
+.btn-s:hover{background:var(--s2);transform:translateY(-2px)}
+.btn-p-outline{background:var(--c0);color:var(--p);border:2px solid var(--p);font-weight:700}
+.btn-p-outline:hover{background:var(--pbg)}
+.btn-outline{background:var(--c0);color:var(--c6);border:2px solid var(--c2);font-weight:700}
+.btn-outline:hover{border-color:var(--p);color:var(--p);background:var(--pbg)}
+.btn-ghost{background:transparent;color:var(--c5);font-weight:700}
+.btn-ghost:hover{color:var(--p)}
+.btn-link{background:transparent;color:var(--p);font-weight:700;padding:0;height:auto;border-radius:0;font-size:inherit;font-family:var(--font)}
+.btn-link:hover{text-decoration:underline}
+.btn-danger{background:transparent;color:var(--danger);border:2px solid var(--c2);font-weight:700}
+.btn-danger:hover{background:var(--danger-bg);border-color:var(--danger)}
+
+/* ── NAV ─────────────────────────── */
+#nav{position:sticky;top:0;z-index:900;height:var(--nav-h);background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1.5px solid var(--c2)}
+.nav-inner{max-width:1200px;margin:0 auto;height:100%;padding:0 24px;display:flex;align-items:center;gap:10px}
+.nav-sp{flex:1}
+.nav-divider{width:1px;height:22px;background:var(--c2);flex-shrink:0;margin:0 2px}
+.nav-cats{display:flex;gap:2px}
+.nav-cat{font-size:13px;font-weight:700;color:var(--c5);padding:6px 11px;border-radius:var(--r8);cursor:pointer;background:transparent;transition:all .15s;white-space:nowrap;font-family:var(--font)}
+.nav-cat:hover{background:var(--pbg);color:var(--p)}
+.nav-cat.active{background:var(--pbg);color:var(--p);font-weight:800}
+.nav-home{font-size:13px;font-weight:700;color:var(--c5);padding:6px 11px;border-radius:var(--r8);cursor:pointer;background:transparent;transition:all .15s;white-space:nowrap;font-family:var(--font)}
+.nav-home:hover{background:var(--pbg);color:var(--p)}
+.nav-home.active{background:var(--pbg);color:var(--p);font-weight:800}
+.nav-about{font-size:13px;font-weight:700;color:var(--c5);padding:6px 11px;border-radius:var(--r8);cursor:pointer;background:transparent;transition:all .15s;white-space:nowrap;font-family:var(--font)}
+.nav-about:hover{background:var(--pbg);color:var(--p)}
+.nav-about.active{background:var(--pbg);color:var(--p);font-weight:800}
+/* ── BACK TO TOP ─────────────────── */
+.back-to-top{position:fixed;bottom:28px;right:28px;width:44px;height:44px;border-radius:50%;background:var(--p);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(136,101,255,.35);transition:all .2s;z-index:800;font-family:var(--font)}
+.back-to-top.visible{display:flex}
+.back-to-top:hover{background:var(--pd);transform:translateY(-3px);box-shadow:0 7px 24px rgba(136,101,255,.45)}
+.back-to-top svg{width:18px;height:18px;stroke:#fff;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.nav-share-btn{background:var(--p);color:#fff;border-radius:var(--rFull);padding:0 18px;height:36px;font-weight:800;font-size:13px;cursor:pointer;transition:all .17s;box-shadow:0 2px 10px rgba(136,101,255,.28);font-family:var(--font)}
+.nav-share-btn:hover{background:var(--pd);transform:translateY(-1px)}
+
+/* user menu */
+.u-wrap{position:relative}
+.u-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;cursor:pointer;border:2.5px solid var(--pbd);transition:transform .15s}
+.u-av:hover{transform:scale(1.07)}
+.u-drop{position:absolute;top:calc(100% + 10px);right:0;min-width:210px;background:var(--c0);border:1.5px solid var(--c2);border-radius:var(--r20);box-shadow:var(--sh-lg);overflow:hidden;display:none;animation:dropIn .16s ease}
+.u-drop.open{display:block}
+@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.u-drop-hd{padding:14px 16px;border-bottom:1.5px solid var(--pbg);background:var(--pbg)}
+.u-drop-name{font-weight:900;font-size:14px;color:var(--c6)}
+.u-drop-email{font-size:11.5px;color:var(--c4);margin-top:1px}
+.u-drop-item{display:flex;align-items:center;padding:10px 16px;font-size:13.5px;font-weight:700;color:var(--c5);cursor:pointer;transition:background .12s;background:transparent;width:100%;text-align:left;border:none;font-family:var(--font)}
+.u-drop-item:hover{background:var(--pbg);color:var(--p)}
+.u-drop-item.danger:hover{background:var(--danger-bg);color:var(--danger)}
+
+/* ── AVATAR ──────────────────────── */
+.av{border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;color:#fff;cursor:pointer;transition:transform .14s}
+.av:hover{transform:scale(1.05)}
+.av-xs{width:26px;height:26px;font-size:11px}
+.av-sm{width:32px;height:32px;font-size:13px}
+.av-md{width:42px;height:42px;font-size:17px}
+.av-lg{width:64px;height:64px;font-size:24px}
+.av-xl{width:96px;height:96px;font-size:34px;border-radius:22px}
+
+/* ── LAYOUT ──────────────────────── */
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.wrap-sm{max-width:700px;margin:0 auto;padding:0 24px}
+.wrap-md{max-width:920px;margin:0 auto;padding:0 24px}
+
+/* ── CARD ────────────────────────── */
+.card{background:var(--c0);border:1.5px solid var(--c2);border-radius:var(--r20);transition:all .2s}
+.card-p{padding:24px}.card-p-lg{padding:32px}
+.card-hover:hover{border-color:var(--pbd);box-shadow:var(--sh-md);transform:translateY(-3px)}
+
+/* ── FORMS ───────────────────────── */
+.fg{display:flex;flex-direction:column;gap:6px}
+.flabel{font-size:13px;font-weight:800;color:var(--c5)}
+.flabel .req{color:var(--p);margin-left:2px}
+.finput{width:100%;background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r12);padding:11px 14px;font-size:14px;transition:all .17s;font-weight:600;color:var(--c6)}
+.finput:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(136,101,255,.12);background:var(--c0)}
+.finput::placeholder{color:var(--c3);font-weight:500}
+.ftextarea{width:100%;background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r16);padding:13px 16px;font-size:14px;color:var(--c6);resize:vertical;min-height:160px;transition:all .17s;line-height:1.65;font-weight:500;font-family:var(--font)}
+.ftextarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(136,101,255,.12);background:var(--c0)}
+.ftextarea::placeholder{color:var(--c3)}
+.fselect{width:100%;background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r12);padding:11px 14px;font-size:14px;appearance:none;cursor:pointer;transition:all .17s;font-weight:600;color:var(--c6);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' fill='none'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23808090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;font-family:var(--font)}
+.fselect:focus{border-color:var(--p);outline:none}
+.fhint{font-size:12px;color:var(--c4);font-weight:500}
+
+/* ── BADGE / TAG ─────────────────── */
+.badge{display:inline-flex;align-items:center;border-radius:var(--rFull);font-size:11.5px;font-weight:800;padding:3px 11px;white-space:nowrap}
+.badge-p{background:var(--pbg);color:var(--p);border:1.5px solid var(--pbd)}
+.badge-s{background:var(--sbg);color:var(--sd);border:1.5px solid var(--sbd)}
+.badge-c1{background:#CBDBEE;color:var(--cat1tx);border:1.5px solid var(--cat1bd)}
+.badge-c2{background:#FBDCF8;color:var(--cat2tx);border:1.5px solid var(--cat2bd)}
+.badge-c3{background:#FFF8E0;color:var(--cat3tx);border:1.5px solid var(--cat3bd)}
+.badge-c4{background:#FED6C0;color:var(--cat4tx);border:1.5px solid var(--cat4bd)}
+.badge-gray{background:var(--c1);color:var(--c5);border:1.5px solid var(--c2)}
+.tag{display:inline-flex;align-items:center;background:var(--c1);color:var(--c4);border:1.5px solid var(--c2);border-radius:var(--rFull);font-size:11.5px;font-weight:700;padding:3px 10px;cursor:pointer;transition:all .14s}
+.tag:hover{background:var(--pbg);color:var(--p);border-color:var(--pbd)}
+
+/* ── CATEGORY HERO CARDS (homepage) ── */
+.cat-cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+@media(max-width:900px){.cat-cards-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.cat-cards-grid{grid-template-columns:1fr}}
+
+.cat-card{border-radius:var(--r20);padding:0;cursor:pointer;transition:all .22s cubic-bezier(.34,1.2,.64,1);position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:196px;border:2px solid transparent;background:#fff;box-shadow:var(--sh-sm)}
+.cat-card:hover{transform:translateY(-5px);box-shadow:var(--sh-md)}
+.cat-card:hover .cc-arrow-wrap{transform:translateX(4px)}
+/* per-card outline + hover border */
+.cc-card-1{border-color:var(--cat1bd)}.cc-card-1:hover{border-color:var(--cat1p);box-shadow:0 6px 28px rgba(46,109,164,.15)}
+.cc-card-2{border-color:var(--cat2bd)}.cc-card-2:hover{border-color:var(--cat2p);box-shadow:0 6px 28px rgba(155,61,181,.15)}
+.cc-card-3{border-color:var(--cat3bd)}.cc-card-3:hover{border-color:var(--cat3p);box-shadow:0 6px 28px rgba(138,101,0,.12)}
+.cc-card-4{border-color:var(--cat4bd)}.cc-card-4:hover{border-color:var(--cat4p);box-shadow:0 6px 28px rgba(194,90,26,.15)}
+.cat-card-inner{padding:20px 20px 18px;display:flex;flex-direction:column;gap:5px;flex:1}
+.cc-icon-wrap{width:44px;height:44px;border-radius:var(--r12);display:flex;align-items:center;justify-content:center;margin-bottom:8px;flex-shrink:0}
+.cc-icon-wrap svg{width:22px;height:22px;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* icon colours — spec exact */
+.cc-ic1{background:#CBDBEE}.cc-ic1 svg{stroke:#2E6DA4}
+.cc-ic2{background:#FBDCF8}.cc-ic2 svg{stroke:#9B3DB5}
+.cc-ic3{background:#FFF8E0}.cc-ic3 svg{stroke:#8A6500}
+.cc-ic4{background:#FED6C0}.cc-ic4 svg{stroke:#C25A1A}
+.cc-eyebrow{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--c4)}
+.cc-title{font-weight:900;font-size:clamp(14px,1.7vw,16px);letter-spacing:-.3px;line-height:1.25;color:var(--c6)}
+.cc-desc{font-size:12px;font-weight:500;line-height:1.45;color:var(--c4);max-width:92%;flex:1}
+.cc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:10px;margin-top:4px}
+.cc-count{font-size:11px;font-weight:800;color:var(--c4)}
+.cc-arrow-wrap{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;transition:transform .2s;color:#fff;background:var(--p)}
+
+/* ── SHARE SECTION ──────────────── */
+.share-section{background:linear-gradient(138deg,var(--p) 0%,var(--pdd) 100%);border-radius:var(--r24);padding:48px 44px;position:relative;overflow:hidden;min-height:220px}
+.share-section::before{content:'';position:absolute;top:-60px;right:-50px;width:240px;height:240px;background:rgba(255,255,255,.08);border-radius:50%}
+.share-section::after{content:'';position:absolute;bottom:-60px;left:22%;width:200px;height:200px;background:rgba(255,212,59,.12);border-radius:50%}
+.share-section .ss-blob3{position:absolute;top:30%;left:-40px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%;pointer-events:none}
+.share-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.share-text h2{font-weight:900;font-size:clamp(22px,3.2vw,32px);color:#fff;letter-spacing:-.6px;margin-bottom:8px;line-height:1.1}
+.share-text p{font-size:15px;color:rgba(255,255,255,.76);font-weight:500;margin-bottom:16px;max-width:480px;line-height:1.6}
+.anon-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.13);color:#fff;border-radius:var(--rFull);padding:6px 16px;font-size:12.5px;font-weight:800;margin-bottom:20px}
+.anon-pill svg{color:var(--s);flex-shrink:0}
+.share-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.share-btn-wh{background:var(--s);color:var(--c6);border:none;border-radius:var(--rFull);padding:0 32px;height:54px;font-weight:900;font-size:16px;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(255,212,59,.32);font-family:var(--font);letter-spacing:-.2px}
+.share-btn-wh:hover{background:var(--s2);transform:translateY(-3px);box-shadow:0 10px 30px rgba(255,212,59,.40)}
+.share-signin-btn{background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.36);border-radius:var(--rFull);padding:0 22px;height:54px;font-weight:800;font-size:14px;cursor:pointer;transition:all .18s;font-family:var(--font)}
+.share-signin-btn:hover{background:rgba(255,255,255,.24);transform:translateY(-2px)}
+
+/* ── COLLAPSIBLE GUIDELINES (on create-post page) ── */
+.gl-accordion{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+@media(max-width:640px){.gl-accordion{grid-template-columns:1fr}}
+.gl-panel{border-radius:var(--r16);border:1.5px solid var(--c2);overflow:hidden;transition:all .22s;background:#fff}
+.gl-panel-hd{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s}
+.gl-panel:hover .gl-panel-hd{background:var(--c1)}
+.gl-panel-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.gl-dot-ok{background:var(--p)}
+.gl-dot-no{background:var(--danger)}
+.gl-panel-title{font-weight:900;font-size:13px;color:var(--c6);flex:1}
+.gl-panel-chevron{font-size:12px;color:var(--c4);transition:transform .22s;font-style:normal;flex-shrink:0}
+.gl-panel-body{max-height:0;overflow:hidden;transition:max-height .28s ease,padding .22s ease;padding:0 18px}
+.gl-panel:hover .gl-panel-body{max-height:300px;padding:2px 18px 16px}
+.gl-panel:hover .gl-panel-chevron{transform:rotate(180deg)}
+.gl-item{font-size:12.5px;color:var(--c5);font-weight:600;padding:4px 0;display:flex;align-items:flex-start;gap:7px;line-height:1.4}
+.gl-item::before{content:'';flex-shrink:0;margin-top:7px;width:4px;height:4px;border-radius:50%}
+.gl-ok .gl-item::before{background:var(--p)}
+.gl-no .gl-item::before{background:var(--danger)}
+
+/* ── SORT BAR ─────────────────────── */
+.sort-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;flex-wrap:wrap;gap:10px}
+.sort-label{font-size:13px;color:var(--c4);font-weight:700}
+.sort-btns{display:flex;gap:6px}
+.sort-btn{padding:5px 14px;border-radius:var(--rFull);font-size:13px;font-weight:800;border:1.5px solid var(--c2);color:var(--c4);background:var(--c0);cursor:pointer;transition:all .14s;font-family:var(--font)}
+.sort-btn.active,.sort-btn:hover{background:var(--c6);color:#fff;border-color:var(--c6)}
+
+/* ── POST CARDS ─────────────────────── */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:15px;padding-bottom:56px}
+.post-card{cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:20px;animation:cardIn .26s ease both}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.post-card:hover .pc-title{color:var(--p)}
+.pc-title{font-weight:900;font-size:16px;color:var(--c6);line-height:1.3;transition:color .15s}
+.pc-excerpt{font-size:13px;color:var(--c4);line-height:1.6;flex:1;font-weight:500}
+.pc-tags{display:flex;flex-wrap:wrap;gap:5px}
+.pc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1.5px solid var(--c2);margin-top:4px}
+.pc-author{display:flex;align-items:center;gap:8px}
+.pc-aname{font-size:12.5px;font-weight:800;color:var(--c5)}
+.pc-adate{font-size:11px;color:var(--c4);font-weight:500}
+.pc-meta{display:flex;gap:10px}
+.pc-mi{font-size:12.5px;color:var(--c4);font-weight:700}
+
+/* ── CATEGORY LANDING ─────────────── */
+.cat-landing-hero{padding:48px 0 40px;position:relative;overflow:hidden}
+.clh-inner{position:relative;z-index:1}
+.clh-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--c5);cursor:pointer;transition:color .14s;margin-bottom:20px}
+.clh-back:hover{color:var(--p)}
+.clh-back span{font-size:16px}
+.clh-badge{display:inline-flex;align-items:center;border-radius:var(--rFull);font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 13px;margin-bottom:12px}
+.clh-title{font-weight:900;font-size:clamp(28px,4.5vw,50px);color:var(--c6);letter-spacing:-1.2px;line-height:1.1;margin-bottom:14px}
+.clh-desc{font-size:16px;color:var(--c5);max-width:600px;line-height:1.7;font-weight:500;margin-bottom:24px}
+.clh-deco{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+
+/* Landing hero per-category colours — aligned with icon bg colours */
+.clh-1{background:linear-gradient(160deg,#CBDBEE 0%,#E8F2F8 50%,var(--c0) 100%)}
+.clh-1 .clh-badge{background:var(--cat1pb);color:var(--cat1tx);border:1.5px solid var(--cat1bd)}
+.clh-1 .clh-deco{background:rgba(46,109,164,.09)}
+.clh-2{background:linear-gradient(160deg,#FBDCF8 0%,#FEF0FD 50%,var(--c0) 100%)}
+.clh-2 .clh-badge{background:var(--cat2pb);color:var(--cat2tx);border:1.5px solid var(--cat2bd)}
+.clh-2 .clh-deco{background:rgba(155,61,181,.08)}
+.clh-3{background:linear-gradient(160deg,#FFF8E0 0%,#FFFCEE 50%,var(--c0) 100%)}
+.clh-3 .clh-badge{background:var(--cat3pb);color:var(--cat3tx);border:1.5px solid var(--cat3bd)}
+.clh-3 .clh-deco{background:rgba(138,101,0,.07)}
+.clh-4{background:linear-gradient(160deg,#FED6C0 0%,#FEEADE 50%,var(--c0) 100%)}
+.clh-4 .clh-badge{background:var(--cat4pb);color:var(--cat4tx);border:1.5px solid var(--cat4bd)}
+.clh-4 .clh-deco{background:rgba(194,90,26,.08)}
+
+/* ── BREADCRUMB ──────────────────── */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--c4);flex-wrap:wrap;font-weight:600;margin-bottom:20px}
+.breadcrumb a{color:var(--c5);font-weight:700;cursor:pointer;transition:color .15s}
+.breadcrumb a:hover{color:var(--p)}
+.bc-sep{color:var(--c3)}
+
+/* ── POST DETAIL ─────────────────── */
+.post-detail-page{padding:32px 0 80px}
+.post-main-title{font-weight:900;font-size:clamp(22px,3.5vw,34px);color:var(--c6);line-height:1.2;letter-spacing:-.6px;margin:14px 0 20px}
+.post-author-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:18px;border-top:1.5px solid var(--c2)}
+.post-aname-link{font-weight:900;font-size:14px;color:var(--c6);cursor:pointer;transition:color .15s}
+.post-aname-link:hover{color:var(--p)}
+.post-asub{font-size:12px;color:var(--c4);font-weight:500}
+.pa-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.like-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:var(--rFull);font-size:13px;font-weight:800;border:1.5px solid var(--c2);background:var(--c0);color:var(--c5);cursor:pointer;transition:all .17s;font-family:var(--font)}
+.like-btn:hover,.like-btn.liked{background:var(--pbg);border-color:var(--pbd);color:var(--p)}
+.post-body-text{font-size:15.5px;line-height:1.82;color:var(--c6);font-weight:500}
+.post-body-text p{margin-bottom:14px}.post-body-text p:last-child{margin-bottom:0}
+.post-body-text strong{font-weight:800}
+/* back nav strip */
+.post-back-strip{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;padding:14px 16px;background:var(--c1);border-radius:var(--r12);border:1.5px solid var(--c2)}
+.post-back-label{font-size:12px;font-weight:700;color:var(--c4);align-self:center;margin-right:4px}
+
+/* ── COMMENTS ────────────────────── */
+.cmts-title{font-weight:900;font-size:19px;color:var(--c6);margin-bottom:18px}
+.cmt-compose{background:var(--c1);border-radius:var(--r16);border:1.5px solid var(--c2);padding:14px;margin-bottom:20px}
+.cmt-compose textarea{width:100%;background:var(--c0);border:1.5px solid var(--c2);border-radius:var(--r12);padding:10px 14px;font-size:14px;color:var(--c6);resize:none;min-height:68px;transition:border-color .17s;font-weight:500;font-family:var(--font)}
+.cmt-compose textarea:focus{border-color:var(--p);outline:none;box-shadow:0 0 0 3px rgba(136,101,255,.10)}
+.cmt-compose-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.cmt-compose-note{font-size:12px;color:var(--c4);font-weight:500}
+.cmt-item{padding:15px 0;border-bottom:1.5px solid var(--c2);animation:fadein .22s ease}
+.cmt-item:last-child{border-bottom:none;padding-bottom:0}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.cmt-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cmt-author{font-weight:900;font-size:13.5px;color:var(--c6);cursor:pointer;transition:color .14s}
+.cmt-author:hover{color:var(--p)}
+.cmt-time{font-size:11.5px;color:var(--c4);font-weight:500}
+.cmt-body{font-size:14px;line-height:1.65;color:var(--c6);margin-bottom:10px;padding-left:40px;font-weight:500}
+.cmt-acts{display:flex;gap:5px;padding-left:40px}
+.cmt-act{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:800;color:var(--c4);background:transparent;border:none;cursor:pointer;padding:4px 9px;border-radius:var(--rFull);transition:all .14s;font-family:var(--font)}
+.cmt-act:hover,.cmt-act.on{color:var(--p);background:var(--pbg)}
+.cmt-act.del:hover{color:var(--danger);background:var(--danger-bg)}
+.replies{margin-left:40px;padding-left:14px;border-left:2.5px solid var(--pbd);margin-top:10px}
+.reply-form{margin-top:10px;display:none}
+.reply-form textarea{width:100%;background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r12);padding:9px 12px;font-size:13px;color:var(--c6);resize:none;min-height:55px;transition:border-color .17s;font-family:var(--font);font-weight:500}
+.reply-form textarea:focus{border-color:var(--p);outline:none}
+.reply-form-foot{display:flex;gap:6px;justify-content:flex-end;margin-top:7px}
+.founder-badge{display:inline-flex;align-items:center;background:var(--p);color:#fff;font-size:9.5px;font-weight:900;letter-spacing:.4px;padding:2px 7px;border-radius:var(--rFull)}
+
+/* ── CREATE POST ─────────────────── */
+.create-page{padding:36px 0 80px}
+.guide-box{background:var(--pbg);border:1.5px solid var(--pbd);border-radius:var(--r20);padding:18px 22px;margin-bottom:20px}
+.guide-title{font-weight:900;font-size:13.5px;color:var(--c6);margin-bottom:9px}
+.guide-item{font-size:13px;color:var(--c5);font-weight:600;display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;line-height:1.45}
+.guide-item::before{content:'';flex-shrink:0;margin-top:7px;width:5px;height:5px;border-radius:50%;background:var(--p)}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--c6);color:#fff;font-size:12.5px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{font-weight:900;font-size:16px;color:var(--c6);display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.cat-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:480px){.cat-opts{grid-template-columns:1fr}}
+.cat-opt{border:1.5px solid var(--c2);border-radius:var(--r16);padding:14px 16px;cursor:pointer;transition:all .17s;background:var(--c1)}
+.cat-opt:hover{border-color:var(--p);background:var(--pbg)}
+.cat-opt.sel{border-color:var(--p);background:var(--pbg);box-shadow:0 0 0 3px rgba(136,101,255,.12)}
+.cat-opt-name{font-weight:900;font-size:13.5px;color:var(--c6)}
+.cat-opt-desc{font-size:12px;color:var(--c4);margin-top:3px;line-height:1.4;font-weight:500}
+.tags-wrap{background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r12);padding:8px;display:flex;flex-wrap:wrap;gap:5px;min-height:44px;cursor:text;transition:border-color .17s}
+.tags-wrap:focus-within{border-color:var(--p);box-shadow:0 0 0 3px rgba(136,101,255,.10)}
+.tag-chip{display:inline-flex;align-items:center;gap:3px;background:var(--pbg);color:var(--p);border:1.5px solid var(--pbd);border-radius:var(--rFull);font-size:12px;font-weight:800;padding:3px 9px}
+.tag-chip-rm{background:transparent;border:none;color:var(--p);font-size:13px;cursor:pointer;line-height:1;padding:0 2px;font-weight:900}
+.tag-chip-rm:hover{color:var(--danger)}
+.tag-text-inp{border:none;background:transparent;font-size:13px;color:var(--c6);min-width:100px;flex:1;font-family:var(--font);font-weight:600}
+.tag-sugg{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tag-sugg-btn{background:var(--c1);border:1.5px solid var(--c2);color:var(--c5);border-radius:var(--rFull);font-size:12px;font-weight:700;padding:3px 10px;cursor:pointer;transition:all .13s;font-family:var(--font)}
+.tag-sugg-btn:hover{background:var(--pbg);color:var(--p);border-color:var(--pbd)}
+
+/* ── PROFILE ──────────────────────── */
+.profile-page{padding:36px 0 80px}
+.profile-hero{background:linear-gradient(138deg,var(--c6) 0%,#3A3A4E 100%);border-radius:var(--r24);padding:36px;margin-bottom:16px;position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;top:-70px;right:-50px;width:280px;height:280px;background:radial-gradient(circle,rgba(136,101,255,.22),transparent 70%);border-radius:50%}
+.profile-hero::after{content:'';position:absolute;bottom:-50px;left:20%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,212,59,.12),transparent 70%);border-radius:50%}
+.profile-hero-inner{position:relative;z-index:1;display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.p-name{font-weight:900;font-size:clamp(20px,2.8vw,28px);color:#fff;letter-spacing:-.4px}
+.p-headline{font-size:15px;color:rgba(255,255,255,.6);margin-top:3px;font-weight:600}
+.p-yoe{display:inline-flex;align-items:center;background:rgba(136,101,255,.18);color:rgba(255,255,255,.85);border-radius:var(--rFull);padding:4px 13px;font-size:12.5px;font-weight:800;margin-top:9px;border:1px solid rgba(136,101,255,.3)}
+.p-stats-strip{display:flex;gap:0;background:rgba(255,255,255,.06);border-radius:var(--r16);margin-top:16px;overflow:hidden}
+.p-stat{flex:1;padding:12px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.p-stat:last-child{border-right:none}
+.p-stat-n{font-weight:900;font-size:22px;color:#fff;letter-spacing:-.5px;line-height:1}
+.p-stat-l{font-size:11px;color:rgba(255,255,255,.5);font-weight:600;margin-top:2px;letter-spacing:.3px;text-transform:uppercase}
+.p-acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.p-section{padding:22px;margin-bottom:12px}
+.p-section-title{font-weight:900;font-size:15px;color:var(--c6);margin-bottom:14px;letter-spacing:-.2px}
+.work-item{background:var(--c1);border-radius:var(--r12);border:1.5px solid var(--c2);padding:14px 18px;margin-bottom:9px}
+.work-item-title{font-weight:900;font-size:13.5px;color:var(--c6);margin-bottom:3px}
+.work-item-desc{font-size:13px;color:var(--c5);line-height:1.6;font-weight:500}
+.p-links{display:flex;gap:8px;flex-wrap:wrap}
+.p-link{display:inline-flex;align-items:center;padding:7px 14px;border-radius:var(--r12);background:var(--c1);border:1.5px solid var(--c2);font-size:13px;font-weight:800;color:var(--c5);transition:all .16s}
+.p-link:hover{border-color:var(--p);color:var(--p);background:var(--pbg)}
+.limited-notice{background:var(--pbg);border:1.5px solid var(--pbd);border-radius:var(--r20);padding:26px;text-align:center;margin:14px 0}
+.connected-pill{display:inline-flex;align-items:center;background:rgba(136,101,255,.18);color:rgba(255,255,255,.88);border:1.5px solid rgba(136,101,255,.35);border-radius:var(--rFull);font-size:12.5px;font-weight:800;padding:4px 13px}
+.p-activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.p-activity-grid{grid-template-columns:1fr}}
+.activity-card{border-radius:var(--r16);border:1.5px solid var(--c2);overflow:hidden}
+.activity-card-hd{padding:14px 18px;border-bottom:1.5px solid var(--c2);background:var(--c1);font-weight:900;font-size:13.5px;color:var(--c6)}
+.activity-card-list{max-height:300px;overflow-y:auto}
+.activity-item{padding:12px 18px;border-bottom:1.5px solid var(--c2);cursor:pointer;transition:background .14s}
+.activity-item:last-child{border-bottom:none}
+.activity-item:hover{background:var(--pbg)}
+.activity-item-title{font-size:13px;font-weight:700;color:var(--c6);line-height:1.35;margin-bottom:3px}
+.activity-item-meta{font-size:11.5px;color:var(--c4);font-weight:600}
+.ptabs{display:flex;gap:0;border-bottom:1.5px solid var(--c2);margin-bottom:20px}
+.ptab{padding:10px 18px;font-size:13.5px;font-weight:800;color:var(--c4);border-bottom:2.5px solid transparent;cursor:pointer;background:transparent;transition:all .16s;margin-bottom:-1.5px;font-family:var(--font)}
+.ptab:hover{color:var(--c6)}
+.ptab.active{color:var(--p);border-bottom-color:var(--p)}
+
+/* ── ABOUT ───────────────────────── */
+.about-page{padding:52px 0 100px}
+.about-top{background:var(--pbg);border-radius:var(--r24);padding:52px 48px;margin-bottom:22px;text-align:center;border:1.5px solid var(--pbd);position:relative;overflow:hidden}
+.about-top::before{content:'';position:absolute;top:-60px;left:-50px;width:180px;height:180px;background:rgba(136,101,255,.07);border-radius:50%}
+.about-top::after{content:'';position:absolute;bottom:-50px;right:-40px;width:160px;height:160px;background:rgba(255,212,59,.10);border-radius:50%}
+.about-top-inner{position:relative;z-index:1}
+.about-top h1{font-weight:900;font-size:clamp(24px,4vw,42px);color:var(--c6);letter-spacing:-1px;line-height:1.15;margin-bottom:12px}
+.about-top h1 em{font-style:normal;color:var(--p)}
+.about-top p{font-size:16px;color:var(--c5);max-width:560px;margin:0 auto;line-height:1.7;font-weight:500}
+.about-section{padding:26px 30px;margin-bottom:12px}
+.about-section h2{font-weight:900;font-size:20px;color:var(--c6);margin-bottom:12px;letter-spacing:-.3px}
+.about-section p{font-size:15px;color:var(--c5);line-height:1.78;margin-bottom:11px;font-weight:500}
+.founder-card{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;background:var(--pbg);border:1.5px solid var(--pbd);border-radius:var(--r20);padding:26px}
+.founder-av{width:68px;height:68px;border-radius:var(--r16);background:linear-gradient(135deg,var(--p),var(--pdd));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;flex-shrink:0;font-family:'Pacifico',cursive}
+.founder-name{font-weight:900;font-size:17px;color:var(--c6)}
+.founder-role{font-size:11.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--p);margin:2px 0 9px}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:8px}
+.value-card{background:#fff;border:2px solid var(--s);border-radius:var(--r16);padding:18px 20px}
+.value-card-title{font-weight:900;font-size:14px;color:var(--c6);margin-bottom:5px}
+.value-card p{font-size:13px;color:var(--c5);font-weight:500;line-height:1.55}
+.about-cats-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+@media(max-width:600px){.about-cats-list{grid-template-columns:1fr}}
+.about-cat-item{padding:16px 18px;border-radius:var(--r16);cursor:pointer;transition:all .16s;display:flex;align-items:center;justify-content:space-between}
+.about-cat-item:hover{transform:translateX(4px);filter:brightness(.96)}
+.about-cat-item h3{font-weight:900;font-size:14px;margin-bottom:3px}
+.about-cat-item p{font-size:12.5px;font-weight:500;opacity:.72}
+.aci-1{background:#CBDBEE;border:1.5px solid var(--cat1bd);color:var(--cat1tx)}
+.aci-2{background:#FBDCF8;border:1.5px solid var(--cat2bd);color:var(--cat2tx)}
+.aci-3{background:#FFF8E0;border:1.5px solid var(--cat3bd);color:var(--cat3tx)}
+.aci-4{background:#FED6C0;border:1.5px solid var(--cat4bd);color:var(--cat4tx)}
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.rule-card{border-radius:var(--r16);padding:18px 20px}
+.rule-card.ok{background:var(--pbg);border:1.5px solid var(--pbd)}
+.rule-card.no{background:var(--danger-bg);border:1.5px solid var(--danger-bd)}
+.rule-card-title{font-weight:900;font-size:13.5px;margin-bottom:6px}
+.rule-card.ok .rule-card-title{color:var(--p)}
+.rule-card.no .rule-card-title{color:var(--danger)}
+.rule-card p{font-size:13px;line-height:1.6;color:var(--c5);font-weight:500}
+
+/* ── MODAL ───────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,44,58,.48);backdrop-filter:blur(10px);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px;animation:fadein .17s ease}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--c0);border-radius:var(--r24);padding:32px;max-width:420px;width:100%;box-shadow:var(--sh-lg);position:relative;animation:modalUp .2s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modalUp{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:var(--r8);border:1.5px solid var(--c2);background:var(--c1);color:var(--c4);font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .14s;font-weight:900;line-height:1}
+.modal-close:hover{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
+
+/* ── TOAST ───────────────────────── */
+#toasts{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:9px;padding:12px 18px;border-radius:var(--r16);font-size:13.5px;font-weight:700;color:#fff;box-shadow:var(--sh-lg);animation:toastIn .24s ease;pointer-events:auto;max-width:310px;font-family:var(--font)}
+.toast-default{background:var(--c6)}.toast-success{background:var(--success)}.toast-error{background:var(--danger)}.toast-info{background:var(--c5)}
+@keyframes toastIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── EMPTY ───────────────────────── */
+.empty{text-align:center;padding:68px 24px}
+.empty-title{font-weight:900;font-size:21px;color:var(--c6);margin-bottom:7px;letter-spacing:-.3px}
+.empty-desc{font-size:14.5px;color:var(--c4);max-width:370px;margin:0 auto 22px;font-weight:500}
+
+/* ── REPORT ──────────────────────── */
+.report-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r12);border:1.5px solid var(--c2);cursor:pointer;transition:all .14s;font-size:13.5px;color:var(--c5);font-weight:600;margin-bottom:7px}
+.report-opt:hover,.report-opt.sel{border-color:var(--p);background:var(--pbg);color:var(--p)}
+
+/* ── SUPPORT ─────────────────────── */
+.support-page{padding:52px 0 100px}
+
+
+/* ── HAMBURGER & MOBILE DRAWER ───── */
+.nav-hamburger{display:none;width:38px;height:38px;border-radius:var(--r8);border:1.5px solid var(--c2);background:var(--c0);align-items:center;justify-content:center;flex-direction:column;gap:5px;cursor:pointer;flex-shrink:0;transition:border-color .15s}
+.nav-hamburger:hover{border-color:var(--p)}
+.nav-hamburger span{display:block;width:18px;height:2px;background:var(--c6);border-radius:2px;transition:all .22s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+.mobile-drawer{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:rgba(44,44,58,.45);backdrop-filter:blur(6px);z-index:850;display:none;animation:fadein .18s ease}
+.mobile-drawer.open{display:block}
+.mobile-drawer-panel{position:absolute;top:0;left:0;right:0;background:var(--c0);border-bottom:1.5px solid var(--c2);box-shadow:0 12px 40px rgba(44,44,58,.16);padding:16px 0 20px;animation:drawerDown .22s cubic-bezier(.34,1.2,.64,1);max-height:calc(100vh - var(--nav-h));overflow-y:auto;-webkit-overflow-scrolling:touch}
+@keyframes drawerDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.mob-section-label{font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--c4);padding:0 20px;margin:14px 0 6px}
+.mob-section-label:first-child{margin-top:4px}
+.mob-nav-item{display:flex;align-items:center;gap:12px;padding:11px 20px;font-size:14px;font-weight:700;color:var(--c6);cursor:pointer;transition:background .13s;border:none;background:transparent;width:100%;text-align:left;font-family:var(--font)}
+.mob-nav-item:hover{background:var(--pbg);color:var(--p)}
+.mob-nav-item.active{color:var(--p);background:var(--pbg)}
+.mob-nav-item .mob-icon{width:32px;height:32px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mob-nav-item .mob-icon svg{width:16px;height:16px;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.mob-divider{height:1px;background:var(--c2);margin:10px 20px}
+.mob-actions{padding:12px 20px 4px;display:flex;flex-direction:column;gap:8px}
+.mob-btn-primary{width:100%;height:46px;border-radius:var(--rFull);background:var(--p);color:#fff;font-weight:900;font-size:15px;cursor:pointer;transition:all .17s;font-family:var(--font);border:none;box-shadow:0 3px 14px rgba(136,101,255,.28)}
+.mob-btn-primary:hover{background:var(--pd)}
+.mob-btn-outline{width:100%;height:46px;border-radius:var(--rFull);background:transparent;color:var(--c6);font-weight:800;font-size:14px;cursor:pointer;transition:all .17s;font-family:var(--font);border:2px solid var(--c2)}
+.mob-btn-outline:hover{border-color:var(--p);color:var(--p)}
+.mob-user-row{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--pbg);border-bottom:1.5px solid var(--pbd);margin-bottom:4px}
+.mob-user-name{font-weight:900;font-size:14px;color:var(--c6)}
+.mob-user-email{font-size:12px;color:var(--c4);font-weight:500;margin-top:1px}
+
+/* ── RESPONSIVE BREAKPOINTS ─────── */
+
+/* Large desktop — default, no changes needed */
+
+/* Tablet landscape — ≤1100px */
+@media(max-width:1100px){
+  .nav-cats{gap:0}
+  .nav-cat{font-size:12.5px;padding:6px 9px}
+  .nav-about{font-size:12.5px;padding:6px 9px}
+}
+
+/* Tablet portrait — ≤900px: hide nav cats, show hamburger */
+@media(max-width:900px){
+  .posts-grid{grid-template-columns:1fr 1fr}
+  .nav-cats{display:none}
+  .nav-about{display:none}
+  .nav-home{display:none}
+  .nav-share-btn{display:none}
+  .nav-hamburger{display:flex}
+  .u-wrap{display:none}
+  .cat-cards-grid{grid-template-columns:repeat(2,1fr)}
+  .p-activity-grid{grid-template-columns:1fr}
+}
+
+/* Mobile — ≤640px */
+@media(max-width:640px){
+  :root{--nav-h:56px}
+  .wrap,.wrap-sm,.wrap-md{padding:0 14px}
+  .nav-inner{padding:0 14px;gap:8px}
+  .nav-divider{display:none}
+  .logo-we{font-size:22px}
+  .logo-loopin{font-size:14px}
+
+  /* hero share section */
+  .share-section{padding:28px 20px}
+  .share-text h2{font-size:22px}
+  .share-btn-wh{height:48px;font-size:14px;padding:0 22px}
+  .share-signin-btn{height:48px;font-size:13px;padding:0 16px}
+
+  /* cat cards — single column */
+  .cat-cards-grid{grid-template-columns:1fr}
+  .cat-card{min-height:160px}
+
+  /* guidelines */
+  .gl-accordion{grid-template-columns:1fr}
+
+  /* posts */
+  .posts-grid{grid-template-columns:1fr}
+
+  /* category landing */
+  .cat-landing-hero{padding:28px 0 22px}
+  .clh-title{font-size:26px;letter-spacing:-.6px}
+  .clh-desc{font-size:14px}
+
+  /* post detail */
+  .post-detail-page{padding:20px 0 60px}
+  .post-main-title{font-size:22px}
+  .post-back-strip{flex-direction:column;gap:8px}
+  .post-back-label{display:none}
+
+  /* breadcrumb */
+  .breadcrumb{font-size:12px}
+
+  /* profile */
+  .profile-hero{padding:20px 16px}
+  .p-name{font-size:20px}
+  .p-stats-strip{flex-wrap:wrap}
+  .p-stat{min-width:80px}
+  .p-activity-grid{grid-template-columns:1fr}
+
+  /* about */
+  .about-top{padding:28px 18px}
+  .about-section{padding:18px 16px}
+  .about-cats-list{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:1fr 1fr}
+  .rules-grid{grid-template-columns:1fr}
+
+  /* forms / create post */
+  .create-page{padding:24px 0 60px}
+  .cat-opts{grid-template-columns:1fr}
+  .modal-box{padding:20px;border-radius:var(--r20)}
+
+  /* toasts */
+  #toasts{bottom:14px;right:14px;left:14px}
+  .toast{max-width:100%}
+
+  /* footer */
+  footer .wrap{flex-direction:column;align-items:flex-start;gap:14px}
+}
+
+/* Very small — ≤380px */
+@media(max-width:380px){
+  .share-section{padding:22px 16px}
+  .cat-cards-grid{gap:10px}
+  .values-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="logo" onclick="go('home');closeMobileMenu()">
+      <span class="logo-we">we</span>
+      <span class="logo-loopin">loopin</span>
+    </div>
+    <div class="nav-divider"></div>
+    <button id="navHome" class="nav-home" onclick="go('home')">Home</button>
+    <button id="navAbout" class="nav-about" onclick="go('about')">About</button>
+    <div class="nav-cats" id="navCats"></div>
+    <div class="nav-sp"></div>
+    <div id="navActs" class="nav-acts"></div>
+    <!-- Hamburger (mobile only) -->
+    <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer" onclick="drawerBgClick(event)">
+  <div class="mobile-drawer-panel" id="mobileDrawerPanel" onclick="event.stopPropagation()">
+    <div id="mobContent"></div>
+  </div>
+</div>
+
+<div id="app"></div>
+<div id="toasts"></div>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+<div class="modal-overlay" id="mOverlay" onclick="mBgClick(event)">
+  <div class="modal-box" id="mBox" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+/* ════════════════════════════════
+   CATEGORIES
+════════════════════════════════ */
+const CATS=[
+  {id:'job-readiness',     label:'Job Readiness',      short:'Job Readiness',
+   sub:['job-application','interview-preparation','onboarding-preparation'],
+   desc:'CVs, interview prep, and landing strong in a new role.',
+   hero:'Everything you need to get hired and hit the ground running.',
+   longDesc:'From writing a CV that actually gets read, to acing every interview, to making a great first impression in your first 90 days.',
+   cc:'cc-1', clh:'clh-1', badge:'badge-c1', aci:'aci-1'},
+  {id:'career-traps',      label:'Career Traps',        short:'Career Traps',
+   sub:['career-sinkhole'],
+   desc:'Toxic workplaces, burnout, dead-end roles, and early warning signs.',
+   hero:'Naming the situations no one talks about openly, and how to get out.',
+   longDesc:'Spotting a sinking ship, knowing when to leave, and rebuilding your confidence after a difficult chapter. You\'re not alone in this.',
+   cc:'cc-2', clh:'clh-2', badge:'badge-c2', aci:'aci-2'},
+  {id:'career-opportunities',label:'Career Opportunities',short:'Opportunities',
+   sub:['career-opportunities'],
+   desc:'Job leads, sector moves, transitions, and the next right thing.',
+   hero:'How to find the move you actually want, and position yourself for it.',
+   longDesc:'Where to look, how to look, and how to position yourself for the career move you actually want. Transitions, pivots, and new directions.',
+   cc:'cc-3', clh:'clh-3', badge:'badge-c3', aci:'aci-3'},
+  {id:'career-acceleration',label:'Career Acceleration', short:'Acceleration',
+   sub:['professional-development'],
+   desc:'Promotions, mentorship, influence, and long-term growth strategy.',
+   hero:'Level up faster and build a career that lasts on your terms.',
+   longDesc:'Levelling up, building influence across teams, and thinking strategically about where you want to be in five years. Growth that\'s intentional.',
+   cc:'cc-4', clh:'clh-4', badge:'badge-c4', aci:'aci-4'},
+];
+const CAT_MAP={};
+CATS.forEach(c=>{CAT_MAP[c.id]=c.id;c.sub.forEach(s=>{CAT_MAP[s]=c.id})});
+const gCat=id=>CATS.find(c=>c.id===id)||CATS.find(c=>c.sub?.includes(id));
+const normCat=id=>CAT_MAP[id]||id;
+
+const ALL_TAGS=['ux-research','user-interviews','career-growth','interview-tips','remote-work','work-life-balance','mentorship','portfolio','networking','salary-negotiation','toxic-workplace','burnout','promotion','cv-writing','linkedin','freelance','startup','corporate','cross-functional','agile','design-thinking','research-ops','stakeholder-management','synthesis','insights','qual-research','quant-research','mixed-methods','survey-design','research-strategy','storytelling','data-analysis','junior-researcher','senior-researcher','team-building'];
+const BAD=['fuck','shit','ass','bitch','cunt','dick','damn','crap','bastard','piss'];
+
+/* ════════════════════════════════
+   SEED DATA
+════════════════════════════════ */
+let USERS=[
+  {id:'u1',username:'lulu_yin',email:'lulu@weloopin.com',pw:'demo123',yearsOfWork:9,jobTitle:'Senior UX Researcher',experience:'Nine years across fintech, healthcare, and enterprise SaaS. Transitioned from market research, led research functions at scrappy startups and large organisations, and built research practices from near-zero.',works:[{title:'Redesigning Patient Onboarding in HealthTech',desc:'Led a 6-month mixed-methods study that reduced drop-off during onboarding by 34%.'},{title:'Cross-cultural Research Across APAC',desc:'Coordinated multi-language usability testing in Singapore, Indonesia, and Japan.'},{title:'Research Ops Overhaul at B2B Fintech',desc:'Identified a research-washing culture and rebuilt the ops system. Reduced time-to-insight by 45%.'}],cvTips:'Lead every bullet with an action verb and a measurable outcome. Recruiters spend roughly 7 seconds on a CV. Tailor it each time.',crossFuncTips:'Build relationships before you need them. Stop presenting "findings", present "opportunities".',links:{linkedin:'https://linkedin.com',portfolio:'https://weloopin.com'},privacy:'connections',isFounder:true,joined:'2024-08-01',connections:['u2','u3','u4','u5']},
+  {id:'u2',username:'alex_wei',email:'alex@example.com',pw:'demo123',yearsOfWork:4,jobTitle:'UX Researcher',experience:'Product researcher with a background in cognitive psychology. Running qual and quant research at a mid-sized SaaS company.',works:[{title:'Mental Models Research for a Fintech App',desc:'Led mental models interviews that drove a complete IA redesign, reducing task completion time by 28%.'}],cvTips:'Tell a story with your portfolio, each case study needs a clear arc: problem, approach, findings, impact.',crossFuncTips:'Never say "research says". Say "users say". Stakeholders respond much better.',links:{linkedin:'https://linkedin.com',portfolio:''},privacy:'public',isFounder:false,joined:'2024-09-12',connections:['u1','u3']},
+  {id:'u3',username:'maya_b',email:'maya@example.com',pw:'demo123',yearsOfWork:7,jobTitle:'Research Lead',experience:'Led research teams at two startups and a large e-commerce company. Specialise in research strategy and making the case for research internally.',works:[{title:'Building a Research Practice from Zero',desc:'Joined a 200-person startup with no research function. Built a team of 4, a participant panel of 600, and a synthesis library within 18 months.'},{title:'Democratising Research at Scale',desc:'Trained 40+ PMs to run lightweight research independently.'}],cvTips:'Your CV is a research artefact. Ask: what does my audience (the hiring manager) need to see? Test and iterate.',crossFuncTips:'Research is a political act. Learn who really influences decisions.',links:{linkedin:'https://linkedin.com',portfolio:''},privacy:'connections',isFounder:false,joined:'2024-10-05',connections:['u1','u2','u4']},
+  {id:'u4',username:'james_p',email:'james@example.com',pw:'demo123',yearsOfWork:2,jobTitle:'Junior UX Researcher',experience:'Just getting started in UX research. Background in data analytics.',works:[],cvTips:'',crossFuncTips:'',links:{linkedin:'',portfolio:''},privacy:'public',isFounder:false,joined:'2025-01-10',connections:['u1']},
+  {id:'u5',username:'sarah_o',email:'sarah@example.com',pw:'demo123',yearsOfWork:11,jobTitle:'Principal Researcher',experience:'Senior research leader. A decade across agencies, in-house, and freelance. Now consulting.',works:[{title:'Research Maturity Assessment Framework',desc:'Designed a proprietary assessment framework used across 20+ client engagements.'},{title:'Global Research Standardisation',desc:'Led standardisation across 12 regional offices of a global consumer goods brand.'},{title:'Accessibility-first Research Practice',desc:'Redesigned recruitment and facilitation to be fully accessible.'}],cvTips:'At senior levels, your CV should say as much about what you enabled others to do as what you did yourself.',crossFuncTips:'You are a translator. Make invisible human behaviour visible, then make it actionable.',links:{linkedin:'https://linkedin.com',portfolio:'https://weloopin.com'},privacy:'connections',isFounder:false,joined:'2024-08-15',connections:['u1','u2','u3']},
+];
+
+let POSTS=[
+  {id:'p1',title:'My hiring manager told me my portfolio was the problem, she was right',content:'I had three final-round interviews last year. I got rejections from all three. The feedback from one hiring manager was direct enough to actually be useful: my case studies read like project reports, not research stories.\n\nShe said she could tell I\'d done rigorous work. But she had no sense of what it felt like to sit across from me in a research session, or how I\'d handled a study that went sideways, or how I made sense of contradictory data under time pressure.\n\nI spent six weeks rebuilding one case study from scratch. I included a section I called "what I got wrong first" — an early synthesis direction that turned out to be completely off because I\'d been unconsciously validating a PM\'s existing hypothesis. I showed how I spotted it, what I changed, and what the final framing looked like.\n\nTwo interviews later, a different hiring manager told me it was the most honest portfolio she\'d read in months. That\'s the version that got me the offer.\n\nPortfolios that hide your thinking aren\'t protecting you. They\'re just making you forgettable.',cat:'career-opportunities',tags:['portfolio','career-growth','job-search'],author:'u2',date:'2025-03-10',likes:84,likedBy:[],cids:['c2','c3']},
+  {id:'p2',title:'Three sentences on your CV are doing more damage than you think',content:'I\'ve reviewed close to 200 research CVs over the past two years as part of hiring panels. The same problem shows up in roughly 70% of them: three or four lines near the top that describe what a UX researcher does as a job function, rather than what this specific person has actually done.\n\n"Experienced in conducting qualitative and quantitative research." "Skilled at synthesising insights and communicating findings to stakeholders." "Passionate about user-centred design."\n\nThese sentences are invisible. They describe the job description, not you.\n\nWhat hiring managers are scanning for in those first eight seconds is specificity. A number. A named method. A problem they haven\'t seen before. An outcome they can picture.\n\n"Led 11-week diary study with 34 participants across three EU markets, feeding directly into the product\'s first accessibility overhaul" is a sentence worth keeping. The passion statement is not.\n\nIf you can\'t point to a line on your CV and say "only I would have written it this way", it probably needs rewriting.',cat:'job-application',tags:['cv-writing','job-search'],author:'u3',date:'2025-03-05',likes:118,likedBy:[],cids:['c5']},
+  {id:'p3',title:'I kept failing the "influence" question in senior researcher interviews until I changed how I thought about it',content:'There is a question that appears in almost every senior or lead researcher interview, worded slightly differently each time but asking the same thing: tell me about a time you influenced a decision without formal authority.\n\nFor a long time I was answering it as a storytelling exercise. I\'d describe a tense meeting, a compelling presentation, a moment when the room turned. I was getting polite nods but clearly not landing it.\n\nWhat changed was realising the question isn\'t about a moment. It\'s about a practice.\n\nThe answer they\'re looking for is: how do you systematically make research impossible to ignore? What do you do before the meeting, during the meeting, and after the meeting? How do you build the conditions where influence doesn\'t require a dramatic intervention because it\'s already baked in?\n\nWhen I started answering it that way — describing how I embedded research check-ins into sprint planning, how I kept a shared doc of live user quotes that PMs pulled from themselves, how I made research feel like a resource rather than a checkpoint — I started getting offers.\n\nThe question is not about a story. It\'s about a system.',cat:'interview-preparation',tags:['interview-tips','senior-researcher','stakeholder-management'],author:'u5',date:'2025-02-28',likes:152,likedBy:[],cids:['c6']},
+  {id:'p6',title:'I asked to be reviewed for promotion and was told it wasn\'t the right time. So I changed what I was measuring.',content:'Eighteen months into my mid-level role I asked my manager about a promotion timeline. She said it wasn\'t the right time and that I needed to "build more visibility with leadership." She couldn\'t tell me what that meant concretely.\n\nInstead of waiting for clarity that wasn\'t coming, I started tracking a different set of metrics for myself.\n\nNot study output. Not stakeholder satisfaction scores. But: how many times per month was my research cited in decision-making conversations I wasn\'t present for? How many people outside my immediate team could describe what I was working on?\n\nThe answer at first was close to zero. So I changed how I shared work. Not more slides. A weekly two-paragraph plain-text summary sent to a wider group. Real quotes from users, one concrete implication, one open question.\n\nWithin four months, two directors I\'d never met had forwarded my summaries to their teams. My manager noticed. Six months after that conversation about visibility, I got the promotion.\n\nI don\'t think I became a better researcher in that period. I became more legible to people who didn\'t attend my sessions.',cat:'professional-development',tags:['promotion','career-growth','research-ops'],author:'u3',date:'2025-02-15',likes:201,likedBy:[],cids:['c11']},
+  {id:'p7',title:'Being a solo researcher nearly broke me. Here\'s what I wish I\'d set up on day one.',content:'When I joined as the first and only researcher at a 150-person scale-up, I thought the autonomy would feel liberating. For the first three months it did.\n\nBy month six I was making significant research decisions — framing questions, choosing methods, interpreting findings — with no one to sense-check me. I had started to notice things slipping. I\'d catch myself writing up findings that felt slightly too neat, too aligned with what the product team hoped to hear.\n\nThe thing no one tells you about solo research roles is that the greatest risk isn\'t being ignored. It\'s losing your own calibration with no one to push back on you.\n\nWhat helped: I set up a monthly call with two researchers at other companies. Not a formal mentoring arrangement, just a standing peer review. We each shared one piece of work-in-progress and gave each other 20 minutes of honest questions. It changed my relationship with my own thinking.\n\nIf you\'re going into a solo role, build the external scaffolding before you need it. You won\'t notice you\'re drifting until someone from outside points it out.',cat:'professional-development',tags:['solo-researcher','research-ops','work-life-balance'],author:'u5',date:'2025-03-18',likes:88,likedBy:[],cids:['c12']},
+  {id:'p9',title:'The moment I realised my workplace wasn\'t just stressful, it was actually harmful',content:'It happened during a reframe session. I\'d been asked to present research findings to a senior leadership group. I\'d run a solid 8-week study. The findings were clear and not what leadership wanted to hear.\n\nHalfway through my presentation, the CPO interrupted and said, "can we focus on what users liked rather than the problems?" I pivoted. I felt relieved that the tension in the room eased.\n\nI drove home that evening and sat in my car for 20 minutes before going inside.\n\nThat was the moment. Not a dramatic confrontation. Just a quiet, private understanding that I had bent my own findings to make a room feel comfortable, and I had felt grateful for the opportunity to do so.\n\nStressful workplaces make you tired. Harmful ones make you complicit. The difference matters enormously for what it does to your sense of professional self.\n\nI gave notice two months later. The process of preparing to leave — quietly updating my portfolio, having speculative conversations with contacts, reminding myself what my actual standards were — was its own form of recovery, before I even left.',cat:'career-sinkhole',tags:['toxic-workplace','burnout','research-ethics'],author:'u3',date:'2025-02-10',likes:174,likedBy:[],cids:[]},
+  {id:'p10',title:'What two years in service design taught me that pure UX research never did',content:'I spent five years as a UX researcher before a sideways move into service design consulting. I expected the work to feel adjacent. It felt completely different.\n\nIn UX research, the artefact is insight. You study, synthesise, present, and move on. In service design, I had to hold the insight and use it to make something — a service blueprint, a process redesign, a set of principles that practitioners would actually use in rooms I\'d never be in.\n\nTwo things it taught me that I\'ve carried back into research work:\n\nFirst: the people who implement change are users too. I\'d spent years researching end users and almost no time understanding the internal humans who had to translate research into product decisions. That gap in my empathy was significant.\n\nSecond: "insight" that doesn\'t survive contact with operational reality isn\'t as robust as it appeared. Some of my most celebrated research findings turned out to be much more conditional than I\'d presented them.\n\nI\'m back in a UX research role now. But I\'m a different researcher for having had to make things with my findings.',cat:'career-opportunities',tags:['career-transition','service-design','research-strategy'],author:'u4',date:'2025-03-15',likes:61,likedBy:[],cids:[]},
+];
+
+let COMMENTS=[
+  {id:'c2',pid:'p1',uid:'u3',parent:null,body:'The "what I got wrong first" section is such a good idea. I\'ve been thinking about what\'s actually memorable in portfolios and it\'s almost always the researcher who shows you their wrong turns. That\'s where the real skill is visible.',date:'2025-03-11',likes:9,likedBy:[]},
+  {id:'c3',pid:'p1',uid:'u5',parent:'c2',body:'Completely agree Maya. Polished case studies all look the same after a while. The ones that stick are the ones where you can feel the researcher actually wrestling with the problem.',date:'2025-03-12',likes:7,likedBy:[]},
+  {id:'c5',pid:'p2',uid:'u4',parent:null,body:'The point about specificity is hitting me hard. I\'ve been writing "experienced in mixed methods research" like that means anything. Going to rewrite my whole summary section this weekend.',date:'2025-03-07',likes:3,likedBy:[]},
+  {id:'c6',pid:'p3',uid:'u2',parent:null,body:'The framing of influence as a system rather than a moment is genuinely new to me. I\'ve been preparing stories for that question but I think I\'ve been answering the wrong version of it.',date:'2025-03-01',likes:11,likedBy:[]},
+  {id:'c11',pid:'p6',uid:'u4',parent:null,body:'The plain-text summary idea rather than more slides is something I\'m going to try. I\'ve been doing post-study readouts that probably three people read. A short paragraph feels more like something people would actually forward.',date:'2025-02-17',likes:2,likedBy:[]},
+  {id:'c12',pid:'p7',uid:'u2',parent:null,body:'The drift you\'re describing is something I recognise and it scared me a bit to read it. I\'ve been solo for eight months and I\'ve started to notice my synthesis feels too tidy. Setting up a peer review call this week.',date:'2025-03-19',likes:9,likedBy:[]},
+];
+
+/* ════════════════════════════════
+   STATE
+════════════════════════════════ */
+let S={
+  user:null, view:'home', params:{}, sortBy:'date',
+  profileTab:'info', profileViewTab:'overview', userMenuOpen:false, cp:{cat:'',title:'',body:'',tags:[]},
+};
+
+/* ════════════════════════════════
+   UTILS
+════════════════════════════════ */
+const uid  = p=>p+(Date.now()%100000)+Math.floor(Math.random()*999);
+const esc  = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmtD = s=>new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const ago  = s=>{const d=Math.floor((Date.now()-new Date(s))/1000);if(d<60)return'just now';if(d<3600)return Math.floor(d/60)+'m';if(d<86400)return Math.floor(d/3600)+'h';if(d<604800)return Math.floor(d/86400)+'d';return fmtD(s)};
+const gU   = id=>USERS.find(u=>u.id===id);
+const gP   = id=>POSTS.find(p=>p.id===id);
+const hasBad=s=>BAD.some(w=>s.toLowerCase().includes(w));
+const isConn=id=>S.user&&(gU(S.user.id)?.connections||[]).includes(id);
+const isOwn =id=>S.user&&S.user.id===id;
+const avI   =u=>(u&&u.username?u.username[0].toUpperCase():'?');
+const avC   =u=>{if(!u)return'#8865FF';const cs=['#8865FF','#6644EE','#5E3FCC','#3E2099','#7B52FF','#4430BB'];let h=0;for(let c of(u.id||''))h+=c.charCodeAt(0);return cs[h%cs.length]};
+
+function isPostLiked(p){return S.user?((p.likedBy||[]).includes(S.user.id)):!!sessionStorage.getItem('wl_lp_'+p.id)}
+function isCmtLiked(c){return S.user?((c.likedBy||[]).includes(S.user.id)):!!sessionStorage.getItem('wl_lc_'+c.id)}
+
+/* ════════════════════════════════
+   TOAST
+════════════════════════════════ */
+function toast(msg,type='default',dur=3000){
+  const el=document.createElement('div');el.className=`toast toast-${type}`;el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>{el.style.transition='opacity .3s,transform .3s';el.style.opacity='0';el.style.transform='translateX(10px)';setTimeout(()=>el.remove(),300)},dur);
+}
+
+/* ════════════════════════════════
+   MODAL
+════════════════════════════════ */
+function openModal(html){document.getElementById('mBox').innerHTML=html;document.getElementById('mOverlay').classList.add('open')}
+function closeModal(){document.getElementById('mOverlay').classList.remove('open')}
+function mBgClick(e){if(e.target===document.getElementById('mOverlay'))closeModal()}
+
+/* ════════════════════════════════
+   AUTH
+════════════════════════════════ */
+function showLogin(){
+  openModal(`<button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div style="margin-bottom:18px">
+      <div class="logo md" style="margin-bottom:10px"><span class="logo-we">we</span><span class="logo-loopin">loopin</span></div>
+      <div style="font-weight:900;font-size:21px;color:var(--c6)">Welcome back</div>
+      <div style="font-size:13.5px;color:var(--c4);margin-top:4px;font-weight:500">Sign in to build your profile and connect with others.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div class="fg"><label class="flabel">Email</label><input class="finput" id="li_em" type="email" placeholder="your@email.com"></div>
+      <div class="fg"><label class="flabel">Password</label><input class="finput" id="li_pw" type="password" placeholder="Your password"></div>
+      <button class="btn btn-p btn-lg" style="width:100%;margin-top:4px" onclick="doLogin()">Sign In</button>
+    </div>
+    <p style="font-size:11.5px;color:var(--c4);text-align:center;margin-top:11px;line-height:1.5">Demo accounts: lulu@weloopin.com / alex@example.com / maya@example.com — password: demo123</p>
+    <div style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--c4);font-weight:600">New here? <button class="btn-link" onclick="showSignup()">Join for free</button></div>
+  `);
+}
+
+function showSignup(){
+  openModal(`<button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div style="margin-bottom:18px">
+      <div class="logo md" style="margin-bottom:10px"><span class="logo-we">we</span><span class="logo-loopin">loopin</span></div>
+      <div style="font-weight:900;font-size:21px;color:var(--c6)">Join WeLoopin</div>
+      <div style="font-size:13.5px;color:var(--c4);margin-top:4px;font-weight:500">Just your email. Browse, comment, and like freely without signing up.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div class="fg"><label class="flabel">Email<span class="req">*</span></label><input class="finput" id="su_em" type="email" placeholder="you@example.com"></div>
+      <div class="fg"><label class="flabel">Username<span class="req">*</span></label><input class="finput" id="su_un" placeholder="e.g. curious_researcher"></div>
+      <div class="fg"><label class="flabel">Password<span class="req">*</span></label><input class="finput" id="su_pw" type="password" placeholder="At least 6 characters"></div>
+    </div>
+    <div style="background:var(--pbg);border-radius:var(--r12);padding:11px 14px;margin-top:13px;font-size:12.5px;color:var(--c5);line-height:1.55;font-weight:600">By joining you agree to keep this space professional and respectful. See our <button class="btn-link" style="font-size:12.5px" onclick="go('about');closeModal()">community guidelines</button>.</div>
+    <button class="btn btn-p btn-lg" style="width:100%;margin-top:14px" onclick="doSignup()">Create my account</button>
+    <div style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--c4);font-weight:600">Already a member? <button class="btn-link" onclick="showLogin()">Sign in</button></div>
+  `);
+}
+
+function doLogin(){
+  const em=document.getElementById('li_em').value.trim(),pw=document.getElementById('li_pw').value.trim();
+  const u=USERS.find(u=>u.email===em&&u.pw===pw);
+  if(!u){toast('Incorrect email or password','error');return}
+  S.user=u;closeModal();toast('Welcome back, '+u.username,'success');render();
+}
+function doSignup(){
+  const em=document.getElementById('su_em').value.trim(),un=document.getElementById('su_un').value.trim().replace(/\s+/g,'_'),pw=document.getElementById('su_pw').value.trim();
+  if(!em||!un||!pw){toast('Please fill in all fields','error');return}
+  if(USERS.find(u=>u.email===em)){toast('Email already registered','error');return}
+  if(USERS.find(u=>u.username===un)){toast('Username taken','error');return}
+  if(pw.length<6){toast('Password must be at least 6 characters','error');return}
+  const nu={id:uid('u'),username:un,email:em,pw,yearsOfWork:0,jobTitle:'',experience:'',works:[],cvTips:'',crossFuncTips:'',links:{linkedin:'',portfolio:''},privacy:'connections',isFounder:false,joined:new Date().toISOString().split('T')[0],connections:[]};
+  USERS.push(nu);S.user=nu;closeModal();toast('Welcome to WeLoopin, '+un+'!','success',4000);go('edit-profile');
+}
+function logout(){S.user=null;S.userMenuOpen=false;toast('Signed out','info');go('home')}
+
+/* ════════════════════════════════
+   CONNECT
+════════════════════════════════ */
+function toggleConnect(tid){
+  if(!S.user){showLogin();return}
+  const cu=gU(S.user.id),tu=gU(tid);if(!cu||!tu||cu.id===tu.id)return;
+  if(!cu.connections)cu.connections=[];if(!tu.connections)tu.connections=[];
+  const i=cu.connections.indexOf(tid);
+  if(i>-1){cu.connections.splice(i,1);const i2=tu.connections.indexOf(cu.id);if(i2>-1)tu.connections.splice(i2,1);toast('Disconnected from '+tu.username,'info')}
+  else{cu.connections.push(tid);tu.connections.push(cu.id);toast('Connected with '+tu.username+'!','success')}
+  S.user=cu;render();
+}
+
+/* ════════════════════════════════
+   LIKES — no sign-in needed
+════════════════════════════════ */
+function likePost(id){
+  const p=gP(id);if(!p)return;if(!p.likedBy)p.likedBy=[];
+  const key='wl_lp_'+id;
+  const liked=S.user?p.likedBy.includes(S.user.id):!!sessionStorage.getItem(key);
+  if(liked){if(S.user){const i=p.likedBy.indexOf(S.user.id);p.likedBy.splice(i,1)}else sessionStorage.removeItem(key);p.likes=Math.max(0,(p.likes||1)-1)}
+  else{if(S.user)p.likedBy.push(S.user.id);else sessionStorage.setItem(key,'1');p.likes=(p.likes||0)+1}
+  render();
+}
+function likeComment(id){
+  const c=COMMENTS.find(x=>x.id===id);if(!c)return;if(!c.likedBy)c.likedBy=[];
+  const key='wl_lc_'+id;
+  const liked=S.user?c.likedBy.includes(S.user.id):!!sessionStorage.getItem(key);
+  if(liked){if(S.user){const i=c.likedBy.indexOf(S.user.id);c.likedBy.splice(i,1)}else sessionStorage.removeItem(key);c.likes=Math.max(0,(c.likes||1)-1)}
+  else{if(S.user)c.likedBy.push(S.user.id);else sessionStorage.setItem(key,'1');c.likes=(c.likes||0)+1}
+  refreshCmts(c.pid);
+}
+
+/* ════════════════════════════════
+   COMMENTS — no sign-in needed
+════════════════════════════════ */
+function ensureGuest(){if(!gU('u_guest'))USERS.push({id:'u_guest',username:'anonymous',email:'',pw:'',yearsOfWork:0,jobTitle:'',experience:'',works:[],cvTips:'',crossFuncTips:'',links:{linkedin:'',portfolio:''},privacy:'public',isFounder:false,joined:'2025-01-01',connections:[]})}
+
+function deleteComment(id){
+  if(!S.user)return;
+  const c=COMMENTS.find(x=>x.id===id);if(!c||c.uid!==S.user.id){toast('You can only delete your own comments','error');return}
+  const pid=c.pid;const toRm=[id,...COMMENTS.filter(x=>x.parent===id).map(x=>x.id)];
+  toRm.forEach(rid=>{const i=COMMENTS.findIndex(x=>x.id===rid);if(i>-1)COMMENTS.splice(i,1)});
+  const p=gP(pid);if(p)p.cids=(p.cids||[]).filter(cid=>!toRm.includes(cid));
+  toast('Comment deleted','info');refreshCmts(pid);
+}
+
+function submitComment(pid,parentId=null){
+  const ta=document.getElementById(parentId?'rta-'+parentId:'cta-'+pid);if(!ta)return;
+  const body=ta.value.trim();if(!body){toast('Please write something first','error');return}
+  ensureGuest();
+  const authorId=S.user?S.user.id:'u_guest';
+  const nc={id:uid('c'),pid,uid:authorId,parent:parentId,body,date:new Date().toISOString().split('T')[0],likes:0,likedBy:[]};
+  COMMENTS.push(nc);const p=gP(pid);if(p){if(!p.cids)p.cids=[];p.cids.push(nc.id)}
+  ta.value='';if(parentId)toggleReply(parentId,false);
+  toast('Comment posted!','success');refreshCmts(pid);
+}
+
+function toggleReply(cid,show){
+  const el=document.getElementById('rf-'+cid);if(!el)return;
+  if(show===undefined)show=el.style.display==='none'||!el.style.display;
+  el.style.display=show?'block':'none';
+  if(show){const ta=document.getElementById('rta-'+cid);if(ta)ta.focus()}
+}
+
+function refreshCmts(pid){
+  const el=document.getElementById('clist-'+pid);if(!el)return;
+  el.innerHTML=cmtList(COMMENTS.filter(c=>c.pid===pid&&!c.parent),pid);
+}
+
+/* ════════════════════════════════
+   CREATE POST — no sign-in needed
+════════════════════════════════ */
+function selCat(id){S.cp.cat=id;CATS.forEach(c=>{const el=document.getElementById('co-'+c.id);if(el)el.className='cat-opt'+(S.cp.cat===c.id?' sel':'')})}
+function addTag(t){
+  if(!t)return;const clean=t.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  if(!clean||hasBad(clean)){if(hasBad(clean))toast('Please keep tags professional','error');return}
+  if(S.cp.tags.includes(clean)||S.cp.tags.length>=10)return;
+  S.cp.tags.push(clean);renderTags();
+}
+function removeTag(t,e){e.stopPropagation();S.cp.tags=S.cp.tags.filter(x=>x!==t);renderTags()}
+function handleTagKey(e){if(e.key==='Enter'||e.key===','){e.preventDefault();addTag(e.target.value);e.target.value=''}}
+function renderTags(){
+  const w=document.getElementById('twrap'),sg=document.getElementById('tsugg');if(!w)return;
+  w.innerHTML=S.cp.tags.map(t=>`<span class="tag-chip">#${esc(t)}<button class="tag-chip-rm" onclick="removeTag('${t}',event)">&#215;</button></span>`).join('')+`<input class="tag-text-inp" id="tti" placeholder="${S.cp.tags.length?'Add more...':'Type tag + Enter'}" onkeydown="handleTagKey(event)">`;
+  if(sg)sg.innerHTML=ALL_TAGS.filter(t=>!S.cp.tags.includes(t)).slice(0,18).map(t=>`<button class="tag-sugg-btn" onclick="addTag('${t}')">#${t}</button>`).join('');
+}
+function submitPost(){
+  const title=(document.getElementById('cp-title')||{}).value?.trim()||S.cp.title;
+  const body=(document.getElementById('cp-body')||{}).value?.trim()||S.cp.body;
+  S.cp.title=title;S.cp.body=body;
+  if(!S.cp.cat){toast('Please select a category','error');return}
+  if(!title||title.length<10){toast('Title must be at least 10 characters','error');return}
+  if(!body||body.length<50){toast('Content must be at least 50 characters','error');return}
+  ensureGuest();
+  const np={id:uid('p'),title,content:body,cat:S.cp.cat,tags:S.cp.tags,author:S.user?S.user.id:'u_guest',date:new Date().toISOString().split('T')[0],likes:0,likedBy:[],cids:[]};
+  POSTS.unshift(np);S.cp={cat:'',title:'',body:'',tags:[]};
+  toast('Post is live!','success');go('post',{id:np.id,fromCat:np.cat});
+}
+
+/* ════════════════════════════════
+   PROFILE SAVE
+════════════════════════════════ */
+function saveProfile(){
+  if(!S.user)return;const u=gU(S.user.id);if(!u)return;
+  const gv=id=>(document.getElementById(id)||{}).value||'';
+  u.yearsOfWork=parseInt(gv('pf-yow'))||0;u.jobTitle=gv('pf-title');u.experience=gv('pf-exp');
+  u.cvTips=gv('pf-cv');u.crossFuncTips=gv('pf-cf');
+  u.links={linkedin:gv('pf-li'),portfolio:gv('pf-port')};
+  const pr=document.querySelector('input[name="pfp"]:checked');if(pr)u.privacy=pr.value;
+  S.user=u;toast('Profile saved!','success');render();
+}
+function saveWorks(){
+  const u=gU(S.user.id);if(!u)return;u.works=[];let i=0;
+  while(true){const t=(document.getElementById('wt-'+i)||{}).value?.trim();const d=(document.getElementById('wd-'+i)||{}).value?.trim();if(t===undefined)break;if(t)u.works.push({title:t,desc:d||''});i++}
+  S.user=u;toast('Works saved!','success');
+}
+function addWork(){const u=gU(S.user.id);if(!u)return;if(u.works.length>=5){toast('Max 5','info');return}u.works.push({title:'',desc:''});render()}
+function removeWork(i){const u=gU(S.user.id);if(!u)return;u.works.splice(i,1);render()}
+function changePw(){
+  const cur=(document.getElementById('pw-cur')||{}).value||'',nw=(document.getElementById('pw-new')||{}).value||'',cf=(document.getElementById('pw-cf')||{}).value||'';
+  const u=gU(S.user.id);if(!u)return;
+  if(u.pw!==cur){toast('Current password incorrect','error');return}
+  if(nw.length<6){toast('New password must be at least 6 characters','error');return}
+  if(nw!==cf){toast('Passwords do not match','error');return}
+  u.pw=nw;S.user=u;['pw-cur','pw-new','pw-cf'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  toast('Password updated!','success');
+}
+
+/* ════════════════════════════════
+   REPORT
+════════════════════════════════ */
+function showReport(pid){
+  openModal(`<button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div style="font-weight:900;font-size:19px;color:var(--c6);margin-bottom:5px">Report this post</div>
+    <p style="font-size:13.5px;color:var(--c4);margin-bottom:13px;font-weight:500">Your report is anonymous and sent directly to our moderation team.</p>
+    ${['Spam or self-promotion','Offensive or harmful content','Inaccurate or misleading information','Violates community guidelines','Inappropriate topic','Other'].map(r=>`<label class="report-opt" onclick="selR(this)"><input type="radio" name="rr" value="${r}" style="accent-color:var(--p)"> ${r}</label>`).join('')}
+    <div class="fg" style="margin-top:9px"><label class="flabel">Additional details (optional)</label><textarea class="ftextarea" id="rd" style="min-height:68px" placeholder="Any context..."></textarea></div>
+    <button class="btn btn-danger" style="width:100%;margin-top:14px;justify-content:center;border-radius:var(--rFull);height:42px" onclick="submitReport('${pid}')">Submit Report</button>
+  `);
+}
+function selR(el){document.querySelectorAll('.report-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel')}
+function submitReport(pid){const r=document.querySelector('input[name="rr"]:checked');if(!r){toast('Please select a reason','error');return}closeModal();toast('Report submitted. Thank you.','success',4000)}
+function deletePost(id){
+  if(!S.user)return;const p=gP(id);if(!p||p.author!==S.user.id){toast('You can only delete your own posts','error');return}
+  const catId=normCat(p.cat);
+  POSTS.splice(POSTS.findIndex(x=>x.id===id),1);COMMENTS.filter(c=>c.pid===id).forEach(c=>{COMMENTS.splice(COMMENTS.findIndex(x=>x.id===c.id),1)});
+  toast('Post deleted','info');go('category',{id:catId});
+}
+
+/* ════════════════════════════════
+   BACK TO TOP
+════════════════════════════════ */
+function showBackToTop(show){
+  const btn=document.getElementById('backToTop');
+  if(btn)btn.classList.toggle('visible',!!show);
+}
+window.addEventListener('scroll',()=>{
+  // only show on pages that registered back-to-top
+  const btn=document.getElementById('backToTop');
+  if(btn&&btn.classList.contains('visible')){}
+  // scroll-based show when past 400px on home/category pages
+},{ passive:true });
+
+/* ════════════════════════════════
+   NAVIGATION
+════════════════════════════════ */
+let mobileMenuOpen=false;
+
+function go(view,params={}){
+  S.view=view;S.params=params;S.userMenuOpen=false;
+  closeMobileMenu();
+  if(view!=='home'&&view!=='category')showBackToTop(false);
+  if(view!=='profile')S.profileViewTab='overview';
+  render();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function closeMobileMenu(){
+  mobileMenuOpen=false;
+  const drawer=document.getElementById('mobileDrawer');
+  const burger=document.getElementById('navHamburger');
+  if(drawer)drawer.classList.remove('open');
+  if(burger)burger.classList.remove('open');
+}
+
+function toggleMobileMenu(){
+  mobileMenuOpen=!mobileMenuOpen;
+  const drawer=document.getElementById('mobileDrawer');
+  const burger=document.getElementById('navHamburger');
+  if(drawer)drawer.classList.toggle('open',mobileMenuOpen);
+  if(burger)burger.classList.toggle('open',mobileMenuOpen);
+  if(mobileMenuOpen)renderMobileDrawer();
+}
+
+function drawerBgClick(e){
+  if(e.target===document.getElementById('mobileDrawer'))closeMobileMenu();
+}
+
+function renderMobileDrawer(){
+  const el=document.getElementById('mobContent');if(!el)return;
+  const catIcons={
+    'job-readiness':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 12h20"/>',
+    'career-traps':'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    'career-opportunities':'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/>',
+    'career-acceleration':'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+  };
+  const catIconBg=['#CBDBEE','#FBDCF8','#FFF8E0','#FED6C0'];
+  const catIconStroke=['#2E6DA4','#9B3DB5','#8A6500','#C25A1A'];
+
+  const userHtml=S.user?`
+    <div class="mob-user-row">
+      <div class="av av-md" style="background:${avC(S.user)}">${avI(S.user)}</div>
+      <div><div class="mob-user-name">${esc(S.user.username)}${S.user.isFounder?' (Founder)':''}</div><div class="mob-user-email">${esc(S.user.email)}</div></div>
+    </div>`:'';
+
+  const catsHtml=CATS.map((c,i)=>`
+    <button class="mob-nav-item ${S.view==='category'&&S.params.id===c.id?'active':''}" onclick="go('category',{id:'${c.id}'})">
+      <div class="mob-icon" style="background:${catIconBg[i]}">
+        <svg viewBox="0 0 24 24" stroke="${catIconStroke[i]}">${catIcons[c.id]||''}</svg>
+      </div>
+      ${c.label}
+    </button>`).join('');
+
+  const actionsHtml=S.user?`
+    <div class="mob-divider"></div>
+    <div class="mob-actions">
+      <button class="mob-btn-primary" onclick="go('create-post')">Share your experience</button>
+      <button class="mob-btn-outline" onclick="go('profile',{id:'${S.user.id}'})">My Profile</button>
+      <button class="mob-btn-outline" onclick="go('edit-profile')">Edit Profile</button>
+      <button class="mob-btn-outline" style="color:var(--danger);border-color:var(--danger-bd)" onclick="logout()">Sign Out</button>
+    </div>`:`
+    <div class="mob-divider"></div>
+    <div class="mob-actions">
+      <button class="mob-btn-primary" onclick="go('create-post')">Share your experience</button>
+      <button class="mob-btn-outline" onclick="showLogin();closeMobileMenu()">Sign In</button>
+    </div>`;
+
+  const navLinksHtml=`
+    <button class="mob-nav-item ${S.view==='home'?'active':''}" onclick="go('home')">
+      <div class="mob-icon" style="background:var(--c1)">
+        <svg viewBox="0 0 24 24" stroke="var(--c5)"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      Home
+    </button>
+    <button class="mob-nav-item ${S.view==='about'?'active':''}" onclick="go('about')">
+      <div class="mob-icon" style="background:var(--pbg)">
+        <svg viewBox="0 0 24 24" stroke="var(--p)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      About WeLoopin
+    </button>
+    <button class="mob-nav-item ${S.view==='support'?'active':''}" onclick="go('support')">
+      <div class="mob-icon" style="background:var(--c1)">
+        <svg viewBox="0 0 24 24" stroke="var(--c5)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      Support
+    </button>`;
+
+  el.innerHTML=`
+    ${userHtml}
+    <div class="mob-section-label">Navigate</div>
+    ${navLinksHtml}
+    <div class="mob-section-label">Topics</div>
+    ${catsHtml}
+    ${actionsHtml}
+  `;
+}
+
+function renderNav(){
+  const nc=document.getElementById('navCats');
+  if(nc)nc.innerHTML=CATS.map(c=>`<button class="nav-cat ${S.view==='category'&&S.params.id===c.id?'active':''}" onclick="go('category',{id:'${c.id}'})">${c.short}</button>`).join('');
+  const ab=document.getElementById('navAbout');
+  if(ab)ab.className='nav-about'+(S.view==='about'?' active':'');
+  const hb=document.getElementById('navHome');
+  if(hb)hb.className='nav-home'+(S.view==='home'?' active':'');
+  const acts=document.getElementById('navActs');
+  if(S.user){
+    acts.innerHTML=`
+      <div class="u-wrap">
+        <div class="u-av" style="background:${avC(S.user)}" onclick="toggleUM()">${avI(S.user)}</div>
+        <div class="u-drop ${S.userMenuOpen?'open':''}">
+          <div class="u-drop-hd"><div class="u-drop-name">${esc(S.user.username)}${S.user.isFounder?' (Founder)':''}</div><div class="u-drop-email">${esc(S.user.email)}</div></div>
+          <button class="u-drop-item" onclick="go('create-post')">Share experience</button>
+          <button class="u-drop-item" onclick="go('profile',{id:'${S.user.id}'})">My Profile</button>
+          <button class="u-drop-item" onclick="go('edit-profile')">Edit Profile</button>
+          <button class="u-drop-item" onclick="go('about')">About WeLoopin</button>
+          <button class="u-drop-item" onclick="go('support')">Support</button>
+          <button class="u-drop-item danger" onclick="logout()">Sign Out</button>
+        </div>
+      </div>`;
+  } else {
+    acts.innerHTML=`
+      <button class="btn btn-ghost btn-sm" onclick="showLogin()">Sign In</button>
+      <button class="nav-share-btn" onclick="go('create-post')">Share experience</button>`;
+  }
+}
+function toggleUM(){S.userMenuOpen=!S.userMenuOpen;renderNav()}
+
+/* ════════════════════════════════
+   HELPERS
+════════════════════════════════ */
+function sorted(posts){return[...posts].sort((a,b)=>S.sortBy==='popularity'?(b.likes||0)-(a.likes||0):new Date(b.date)-new Date(a.date))}
+function sortBar(count,scope){return`<div class="sort-bar"><span class="sort-label">${count} post${count!==1?'s':''} ${scope}</span><div class="sort-btns"><button class="sort-btn ${S.sortBy==='date'?'active':''}" onclick="S.sortBy='date';render()">Latest</button><button class="sort-btn ${S.sortBy==='popularity'?'active':''}" onclick="S.sortBy='popularity';render()">Most loved</button></div></div>`}
+
+function postCard(p,showCatBadge=true){
+  const au=gU(p.author);const cat=gCat(normCat(p.cat));
+  const tc=COMMENTS.filter(c=>c.pid===p.id&&!c.parent).length;
+  const catId=normCat(p.cat);
+  return`<div class="card card-hover post-card" onclick="go('post',{id:'${p.id}',fromCat:'${catId}'})">
+    ${showCatBadge?`<div><span class="badge ${cat?.badge||'badge-gray'}">${esc(cat?.label||p.cat)}</span></div>`:''}
+    <div class="pc-title">${esc(p.title)}</div>
+    <div class="pc-excerpt">${esc((p.content||'').substring(0,135))}${(p.content||'').length>135?'...':''}</div>
+    ${(p.tags||[]).length?`<div class="pc-tags">${p.tags.slice(0,3).map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="pc-footer">
+      <div class="pc-author">
+        <div class="av av-sm" style="background:${avC(au)}">${avI(au)}</div>
+        <div><div class="pc-aname">${esc(au?.username||'anonymous')}${au?.isFounder?' (Founder)':''}</div><div class="pc-adate">${fmtD(p.date)}</div></div>
+      </div>
+      <div class="pc-meta"><span class="pc-mi">${p.likes||0} likes</span><span class="pc-mi">${tc} replies</span></div>
+    </div>
+  </div>`;
+}
+
+function cmtItem(c,pid){
+  const au=gU(c.uid);const isA=S.user&&S.user.id===c.uid;const isL=isCmtLiked(c);
+  const reps=COMMENTS.filter(r=>r.parent===c.id);
+  const clickProfile=au?.id&&au.id!=='u_guest'?`go('profile',{id:'${c.uid}',fromPost:'${pid}',fromCat:'${S.params.fromCat||normCat(gP(pid)?.cat||'')}'})`:'void(0)';
+  return`<div class="cmt-item" id="ci-${c.id}">
+    <div class="cmt-head">
+      <div class="av av-sm" style="background:${avC(au)};cursor:pointer" onclick="${clickProfile}">${avI(au)}</div>
+      <span class="cmt-author" onclick="${clickProfile}">${esc(au?.username||'anonymous')}</span>
+      ${au?.isFounder?`<span class="founder-badge">Founder</span>`:''}
+      <span class="cmt-time">${ago(c.date)}</span>
+    </div>
+    <div class="cmt-body">${esc(c.body)}</div>
+    <div class="cmt-acts">
+      <button class="cmt-act ${isL?'on':''}" onclick="likeComment('${c.id}')">${c.likes||0} likes</button>
+      <button class="cmt-act" onclick="toggleReply('${c.id}')">Reply</button>
+      ${isA?`<button class="cmt-act del" onclick="deleteComment('${c.id}')">Delete</button>`:''}
+    </div>
+    <div class="reply-form" id="rf-${c.id}" style="display:none;padding-left:40px;margin-top:8px">
+      <textarea id="rta-${c.id}" placeholder="Write a reply..." rows="2"></textarea>
+      <div class="reply-form-foot">
+        <button class="btn btn-outline btn-xs" onclick="toggleReply('${c.id}',false)">Cancel</button>
+        <button class="btn btn-p btn-xs" onclick="submitComment('${pid}','${c.id}')">Reply</button>
+      </div>
+    </div>
+    ${reps.length?`<div class="replies">${reps.map(r=>cmtItem(r,pid)).join('')}</div>`:''}
+  </div>`;
+}
+function cmtList(cmts,pid){
+  if(!cmts.length)return`<p style="text-align:center;color:var(--c4);font-size:14px;padding:26px 0;font-weight:500">No comments yet. Share your thoughts below.</p>`;
+  return cmts.map(c=>cmtItem(c,pid)).join('');
+}
+
+/* ════════════════════════════════
+   VIEW: HOME
+════════════════════════════════ */
+function viewHome(){
+  const posts=sorted(POSTS);
+  setTimeout(()=>showBackToTop(true),0);
+  return`
+    <div style="padding:28px 0 0">
+      <div class="wrap">
+        <div class="share-section">
+          <div class="ss-blob3"></div>
+          <div class="share-inner">
+            <div class="share-text">
+              <h2 style="white-space:nowrap">Your experience matters here.</h2>
+              <p>Share what you've seen, learned, or survived in your research career. Real stories help real people.</p>
+              <div class="anon-pill">
+                <svg width="14" height="14" fill="none" stroke="var(--s)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Share anonymously, no sign-up needed
+              </div>
+              <div class="share-ctas">
+                <button class="share-btn-wh" onclick="go('create-post')">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  Share your experience
+                </button>
+                ${!S.user?`<button class="share-signin-btn" onclick="showLogin()">Sign In</button>`:''}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:36px 0 0">
+      <div class="wrap">
+        <div style="margin-bottom:16px">
+          <div style="font-weight:900;font-size:clamp(19px,2.5vw,24px);color:var(--c6);letter-spacing:-.4px">Explore by topic</div>
+          <div style="font-size:14px;color:var(--c4);margin-top:4px;font-weight:500">Four areas covering the full arc of a researcher's career. Click any card to explore.</div>
+        </div>
+        <div class="cat-cards-grid">
+          ${CATS.map((c,i)=>{
+            const count=POSTS.filter(p=>normCat(p.cat)===c.id).length;
+            const icClass=['cc-ic1','cc-ic2','cc-ic3','cc-ic4'][i];
+            const cardClass=['cc-card-1','cc-card-2','cc-card-3','cc-card-4'][i];
+            const icons={
+              'job-readiness':`<svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="12.01"/><path d="M2 12h20"/></svg>`,
+              'career-traps':`<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+              'career-opportunities':`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>`,
+              'career-acceleration':`<svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+            };
+            return`<div class="cat-card ${cardClass}" onclick="go('category',{id:'${c.id}'})">
+              <div class="cat-card-inner">
+                <div class="cc-icon-wrap ${icClass}">${icons[c.id]||''}</div>
+                <div class="cc-eyebrow">Topic</div>
+                <div class="cc-title">${c.label}</div>
+                <div class="cc-desc">${c.desc}</div>
+                <div class="cc-foot">
+                  <div class="cc-count">${count} post${count!==1?'s':''}</div>
+                  <div class="cc-arrow-wrap">&#8594;</div>
+                </div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:8px 0 0">
+      <div class="wrap">
+        ${sortBar(posts.length,'across all topics')}
+        ${posts.length
+          ?`<div class="posts-grid">${posts.map(p=>postCard(p,true)).join('')}</div>`
+          :`<div class="empty"><div class="empty-title">Nothing here yet</div><div class="empty-desc">Be the first to share something.</div><button class="btn btn-p" onclick="go('create-post')">Share now</button></div>`
+        }
+      </div>
+    </div>`;}
+
+/* ════════════════════════════════
+   VIEW: CATEGORY LANDING PAGE
+════════════════════════════════ */
+function viewCategory(){
+  const cat=gCat(S.params.id);
+  if(!cat)return viewHome();
+  const catPosts=sorted(POSTS.filter(p=>normCat(p.cat)===cat.id));
+  setTimeout(()=>showBackToTop(true),0);
+  return`
+    <div class="cat-landing-hero ${cat.clh}">
+      <div class="clh-deco" style="width:300px;height:300px;top:-120px;right:-60px"></div>
+      <div class="clh-deco" style="width:160px;height:160px;bottom:-60px;left:15%"></div>
+      <div class="wrap clh-inner">
+        <div class="clh-back" onclick="go('home')"><span>&#8592;</span> Back to all topics</div>
+        <span class="clh-badge">${cat.label}</span>
+        <h1 class="clh-title">${cat.hero}</h1>
+        <p class="clh-desc">${cat.longDesc}</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-p" onclick="go('create-post')">Share in ${cat.short}</button>
+          <span style="font-size:13px;color:var(--c4);font-weight:600">${catPosts.length} post${catPosts.length!==1?'s':''} in this topic</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:8px 0 0">
+      <div class="wrap">
+        ${sortBar(catPosts.length,'in '+cat.label)}
+        ${catPosts.length
+          ?`<div class="posts-grid">${catPosts.map(p=>postCard(p,false)).join('')}</div>`
+          :`<div class="empty"><div class="empty-title">No posts yet in ${cat.label}</div><div class="empty-desc">Be the first to share something here.</div><button class="btn btn-p" onclick="go('create-post')">Share first</button></div>`
+        }
+      </div>
+    </div>`;
+}
+
+/* ════════════════════════════════
+   VIEW: POST DETAIL
+════════════════════════════════ */
+function viewPost(){
+  const p=gP(S.params.id);
+  if(!p)return`<div class="wrap"><div class="empty"><div class="empty-title">Post not found</div><button class="btn btn-p" onclick="go('home')">Back home</button></div></div>`;
+  const au=gU(p.author);const cat=gCat(normCat(p.cat));
+  const isLiked=isPostLiked(p);const isOwnPost=S.user&&S.user.id===p.author;
+  const topCmts=COMMENTS.filter(c=>c.pid===p.id&&!c.parent);
+  const catId=normCat(p.cat);
+  // fromCat lets us know where the user came from
+  const fromCat=S.params.fromCat||catId;
+  const fromCatObj=gCat(fromCat)||cat;
+  return`<div class="post-detail-page">
+    <div class="wrap-md">
+
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb">
+        <a onclick="go('home')">Home</a>
+        <span class="bc-sep">/</span>
+        <a onclick="go('category',{id:'${catId}'})">${esc(cat?.label||p.cat)}</a>
+        <span class="bc-sep">/</span>
+        <span style="color:var(--c4)">${esc(p.title.substring(0,44))}${p.title.length>44?'...':''}</span>
+      </div>
+
+      <!-- POST HEADER -->
+      <div class="card card-p" style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span class="badge ${cat?.badge||'badge-gray'}">${esc(cat?.label||p.cat)}</span>
+          ${(p.tags||[]).map(t=>`<span class="tag">#${esc(t)}</span>`).join('')}
+        </div>
+        <h1 class="post-main-title">${esc(p.title)}</h1>
+        <div class="post-author-row">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="av av-md" style="background:${avC(au)};cursor:pointer" onclick="${au?.id&&au.id!=='u_guest'?`go('profile',{id:'${p.author}',fromPost:'${p.id}',fromCat:'${fromCat}'})`:'void(0)'}">${avI(au)}</div>
+            <div>
+              <div class="post-aname-link" onclick="${au?.id&&au.id!=='u_guest'?`go('profile',{id:'${p.author}',fromPost:'${p.id}',fromCat:'${fromCat}'})`:'void(0)'}">${esc(au?.username||'anonymous')}${au?.isFounder?' (Founder)':''}</div>
+              <div class="post-asub">${esc(au?.jobTitle||'Researcher')}, ${fmtD(p.date)}</div>
+            </div>
+          </div>
+          <div class="pa-actions">
+            <button class="like-btn ${isLiked?'liked':''}" onclick="likePost('${p.id}')">${p.likes||0} ${isLiked?'Liked':'Like'}</button>
+            <button class="btn btn-outline btn-sm" onclick="showReport('${p.id}')">Report</button>
+            ${isOwnPost?`<button class="btn btn-danger btn-sm" onclick="deletePost('${p.id}')">Delete</button>`:''}
+          </div>
+        </div>
+      </div>
+
+      <!-- POST BODY -->
+      <div class="card card-p" style="margin-bottom:14px">
+        <div class="post-body-text">${esc(p.content).replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</div>
+      </div>
+
+      <!-- BACK NAVIGATION STRIP -->
+      <div class="post-back-strip">
+        <span class="post-back-label">Navigate back to:</span>
+        <button class="btn btn-outline btn-sm" onclick="go('home')">&#8592; All Topics</button>
+        <button class="btn btn-p-outline btn-sm" onclick="go('category',{id:'${catId}'})">&#8592; ${esc(cat?.label||'Category')}</button>
+      </div>
+
+      <!-- COMMENTS -->
+      <div class="card card-p">
+        <div class="cmts-title">Discussion (${topCmts.length})</div>
+        <div class="cmt-compose">
+          <div style="display:flex;gap:9px;align-items:flex-start">
+            <div class="av av-sm" style="background:${avC(S.user)};margin-top:4px">${avI(S.user)}</div>
+            <div style="flex:1">
+              <textarea id="cta-${p.id}" placeholder="${S.user?'Share your thoughts or a follow-up question...':'Comment anonymously, no sign-in needed...'}"></textarea>
+              <div class="cmt-compose-foot">
+                ${!S.user?`<span class="cmt-compose-note">Commenting as anonymous. <button class="btn-link" style="font-size:12px" onclick="showLogin()">Sign in</button> to use your name.</span>`:'<span></span>'}
+                <button class="btn btn-p btn-sm" onclick="submitComment('${p.id}')">Post Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="clist-${p.id}">${cmtList(topCmts,p.id)}</div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+/* ════════════════════════════════
+   VIEW: CREATE POST
+════════════════════════════════ */
+function viewCreate(){
+  const icons={
+    'job-readiness':`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 12h20"/></svg>`,
+    'career-traps':`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    'career-opportunities':`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>`,
+    'career-acceleration':`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+  };
+  const catIconColors=['#CBDBEE','#FBDCF8','#FFF8E0','#FED6C0'];
+  const catStrokeColors=['#2E6DA4','#9B3DB5','#8A6500','#C25A1A'];
+  return`<div class="create-page"><div class="wrap-md">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-weight:900;font-size:clamp(22px,3vw,30px);color:var(--c6);letter-spacing:-.5px;margin-bottom:4px">Share your experience</div>
+        <div style="font-size:14px;color:var(--c4);font-weight:500">No sign-in required. You can share completely anonymously.</div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="go('home')">&#8592; Back</button>
+    </div>
+
+    <div style="background:var(--pbg);border:1.5px solid var(--pbd);border-radius:var(--r16);padding:13px 18px;margin-bottom:16px">
+      <div style="font-size:13.5px;font-weight:700;color:var(--p)">You can share without signing up. Your post will appear as "anonymous" unless you are signed in.</div>
+    </div>
+
+    <!-- Collapsible community guidelines -->
+    <div class="gl-accordion" style="margin-bottom:20px">
+      <div class="gl-panel gl-ok">
+        <div class="gl-panel-hd">
+          <span class="gl-panel-dot gl-dot-ok"></span>
+          <span class="gl-panel-title">This is a safe space for&#8230;</span>
+          <em class="gl-panel-chevron">&#8964;</em>
+        </div>
+        <div class="gl-panel-body">
+          ${['Real stories from your career, messy bits and all','Questions you\'re too afraid to ask on LinkedIn','Honest takes on workplace culture and systems','Advice that comes from actual experience, not theory','Posts shared anonymously, if that feels right','Respectful pushback and different viewpoints'].map(g=>`<div class="gl-item">${g}</div>`).join('')}
+        </div>
+      </div>
+      <div class="gl-panel gl-no">
+        <div class="gl-panel-hd">
+          <span class="gl-panel-dot gl-dot-no"></span>
+          <span class="gl-panel-title">Please don't&#8230;</span>
+          <em class="gl-panel-chevron">&#8964;</em>
+        </div>
+        <div class="gl-panel-body">
+          ${['Attack or name specific people','Share confidential client or company info','Post content that\'s discriminatory','Spam or promote without adding real value','Go off-topic from professional life','Present opinions as facts'].map(g=>`<div class="gl-item">${g}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-p" style="margin-bottom:14px">
+      <div class="step-title"><span class="step-num">1</span> Select a Category</div>
+      <div class="cat-opts">
+        ${CATS.map((c,i)=>`<div class="cat-opt ${S.cp.cat===c.id?'sel':''}" id="co-${c.id}" onclick="selCat('${c.id}')">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+            <div style="width:32px;height:32px;border-radius:8px;background:${catIconColors[i]};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${catStrokeColors[i]}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${{
+                'job-readiness':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 12h20"/>',
+                'career-traps':'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+                'career-opportunities':'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/>',
+                'career-acceleration':'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+              }[c.id]||''}</svg>
+            </div>
+            <div class="cat-opt-name">${c.label}</div>
+          </div>
+          <div class="cat-opt-desc">${c.desc}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card card-p" style="margin-bottom:14px">
+      <div class="step-title"><span class="step-num">2</span> Write Your Post</div>
+      <div class="fg" style="margin-bottom:14px">
+        <label class="flabel">Title<span class="req">*</span></label>
+        <input class="finput" id="cp-title" placeholder="e.g. How I navigated a toxic team and came out stronger" value="${esc(S.cp.title)}" oninput="S.cp.title=this.value" style="font-size:15px;font-weight:700">
+        <span class="fhint">Be specific, a clear title helps people decide whether this is for them.</span>
+      </div>
+      <div class="fg">
+        <label class="flabel">Content<span class="req">*</span> <span style="font-weight:500;color:var(--c4)">(min. 50 characters)</span></label>
+        <textarea class="ftextarea" id="cp-body" style="min-height:220px" placeholder="Share your story, insight, or question..." oninput="S.cp.body=this.value">${esc(S.cp.body)}</textarea>
+      </div>
+    </div>
+
+    <div class="card card-p" style="margin-bottom:18px">
+      <div class="step-title"><span class="step-num">3</span> Add Tags <span style="font-weight:500;font-size:14px;color:var(--c4)">(optional)</span></div>
+      <div class="tags-wrap" id="twrap" onclick="document.getElementById('tti')?.focus()">
+        <input class="tag-text-inp" id="tti" placeholder="Type tag + Enter" onkeydown="handleTagKey(event)">
+      </div>
+      <div class="tag-sugg" id="tsugg" style="margin-top:7px">${ALL_TAGS.slice(0,18).map(t=>`<button class="tag-sugg-btn" onclick="addTag('${t}')">#${t}</button>`).join('')}</div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="S.cp={cat:'',title:'',body:'',tags:[]};go('home')">Discard</button>
+      <button class="btn btn-p btn-lg" onclick="S.cp.title=document.getElementById('cp-title')?.value||S.cp.title;S.cp.body=document.getElementById('cp-body')?.value||S.cp.body;submitPost()">Publish</button>
+    </div>
+  </div></div>`;
+}
+
+/* ════════════════════════════════
+   VIEW: PROFILE
+════════════════════════════════ */
+function viewProfile(){
+  const uid=S.params.id,u=gU(uid);
+  if(!u)return`<div class="wrap"><div class="empty"><div class="empty-title">Profile not found</div><button class="btn btn-p" onclick="go('home')">Back home</button></div></div>`;
+  const own=isOwn(uid),connected=isConn(uid),canFull=own||connected||u.privacy==='public';
+  const uPosts=POSTS.filter(p=>p.author===uid);
+  const commentedIds=[...new Set(COMMENTS.filter(c=>c.uid===uid).map(c=>c.pid))];
+  const commentedPosts=POSTS.filter(p=>commentedIds.includes(p.id)&&p.author!==uid);
+  const connectCount=(u.connections||[]).length;
+  const fromPost=S.params.fromPost;
+  const fromCat=S.params.fromCat;
+  // for own profile, allow tab switching between Overview and My Connections
+  const pvTab=own?S.profileViewTab||'overview':'overview';
+
+  const connectionsList=(u.connections||[]).map(cid=>gU(cid)).filter(Boolean);
+
+  return`<div class="profile-page"><div class="wrap-md">
+    <div class="breadcrumb">
+      <a onclick="go('home')">Home</a>
+      ${fromCat?`<span class="bc-sep">/</span><a onclick="go('category',{id:'${fromCat}'})">${esc(gCat(fromCat)?.label||fromCat)}</a>`:''}
+      ${fromPost?`<span class="bc-sep">/</span><a onclick="go('post',{id:'${fromPost}',fromCat:'${fromCat||''}'})">${esc((gP(fromPost)?.title||'Post').substring(0,44))}${(gP(fromPost)?.title?.length||0)>44?'...':''}</a>`:''}
+      <span class="bc-sep">/</span><span style="color:var(--c4)">${esc(u.username)}</span>
+    </div>
+
+    <div class="profile-hero" style="margin-bottom:16px">
+      <div class="profile-hero-inner">
+        <div class="av av-xl" style="background:${avC(u)}">${avI(u)}</div>
+        <div style="flex:1">
+          <h1 class="p-name">${esc(u.username)}${u.isFounder?' (Founder)':''}</h1>
+          ${u.jobTitle?`<div class="p-headline">${esc(u.jobTitle)}</div>`:''}
+          ${u.yearsOfWork?`<div class="p-yoe">${u.yearsOfWork} yr${u.yearsOfWork!==1?'s':''} of experience</div>`:''}
+          <div class="p-stats-strip">
+            <div class="p-stat"><div class="p-stat-n">${connectCount}</div><div class="p-stat-l">Connects</div></div>
+            <div class="p-stat"><div class="p-stat-n">${uPosts.length}</div><div class="p-stat-l">Posts</div></div>
+            <div class="p-stat"><div class="p-stat-n">${commentedIds.length}</div><div class="p-stat-l">Discussions</div></div>
+          </div>
+          <div class="p-acts">
+            ${own
+              ?`<button class="btn btn-s btn-sm" style="color:var(--c6)" onclick="go('edit-profile')">Edit Profile</button>`
+              :S.user?connected
+                ?`<span class="connected-pill">Connected</span><button class="btn btn-sm" style="background:#fff;color:var(--c6);border:2px solid var(--c3);font-weight:700;border-radius:var(--rFull);padding:0 16px;height:34px;cursor:pointer;transition:all .15s;font-family:var(--font)" onmouseover="this.style.borderColor='var(--danger)';this.style.color='var(--danger)'" onmouseout="this.style.borderColor='var(--c3)';this.style.color='var(--c6)'" onclick="toggleConnect('${uid}')">Disconnect</button>`
+                :`<button class="btn btn-s" style="color:var(--c6)" onclick="toggleConnect('${uid}')">Connect</button>`
+              :`<button class="btn btn-s" style="color:var(--c6)" onclick="showLogin()">Connect</button>`
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ${own?`
+    <!-- OWN PROFILE: tab strip -->
+    <div class="ptabs" style="margin-bottom:20px">
+      <button class="ptab ${pvTab==='overview'?'active':''}" onclick="S.profileViewTab='overview';render()">Overview</button>
+      <button class="ptab ${pvTab==='connections'?'active':''}" onclick="S.profileViewTab='connections';render()">
+        My Connections
+        ${connectCount>0?`<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--p);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;min-width:18px;height:18px;padding:0 5px;margin-left:6px">${connectCount}</span>`:''}
+      </button>
+    </div>`:''}
+
+    ${!canFull&&!own?`<div class="limited-notice">
+      <div style="font-weight:900;font-size:19px;color:var(--c6);margin-bottom:5px">Limited Profile View</div>
+      <p style="font-size:14px;color:var(--c5);margin-bottom:14px;font-weight:500">${esc(u.username)} has set their profile to connected users only.</p>
+      ${S.user?`<button class="btn btn-p" onclick="toggleConnect('${uid}')">Connect with ${esc(u.username)}</button>`:`<div style="display:flex;gap:8px;justify-content:center"><button class="btn btn-p" onclick="showSignup()">Join to Connect</button><button class="btn btn-outline btn-sm" onclick="showLogin()">Sign In</button></div>`}
+    </div>`:''}
+
+    ${own&&pvTab==='connections'?`
+    <!-- CONNECTIONS TAB -->
+    ${connectionsList.length===0?`
+      <div class="empty" style="padding:48px 24px">
+        <div style="font-size:40px;margin-bottom:12px">🤝</div>
+        <div class="empty-title">No connections yet</div>
+        <div class="empty-desc">When you connect with other researchers, they'll appear here. Browse posts and connect with people whose work resonates with you.</div>
+        <button class="btn btn-p" onclick="go('home')">Explore posts</button>
+      </div>`:`
+      <div style="margin-bottom:18px">
+        <div style="font-weight:900;font-size:17px;color:var(--c6);margin-bottom:3px">People you're connected with</div>
+        <div style="font-size:13px;color:var(--c4);font-weight:500">${connectCount} connection${connectCount!==1?'s':''}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:40px">
+        ${connectionsList.map(cu=>`
+          <div onclick="go('profile',{id:'${cu.id}'})" style="display:flex;align-items:center;gap:12px;padding:16px;background:#fff;border:1.5px solid var(--c2);border-radius:var(--r16);cursor:pointer;transition:all .18s" onmouseover="this.style.borderColor='var(--pbd)';this.style.boxShadow='var(--sh-sm)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--c2)';this.style.boxShadow='none';this.style.transform='none'">
+            <div class="av av-md" style="background:${avC(cu)};flex-shrink:0">${avI(cu)}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:900;font-size:14px;color:var(--c6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(cu.username)}${cu.isFounder?' (Founder)':''}</div>
+              ${cu.jobTitle?`<div style="font-size:12px;color:var(--c4);font-weight:500;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(cu.jobTitle)}</div>`:''}
+              ${cu.yearsOfWork?`<div style="font-size:11.5px;color:var(--c4);font-weight:500;margin-top:2px">${cu.yearsOfWork} yr${cu.yearsOfWork!==1?'s':''} experience</div>`:''}
+            </div>
+            <svg width="14" height="14" fill="none" stroke="var(--c3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>`).join('')}
+      </div>`}
+    `:''}
+
+    ${pvTab==='overview'||!own?`
+    ${canFull?`
+      ${u.experience?`<div class="card p-section" style="margin-bottom:12px"><div class="p-section-title">Work Experience</div><p style="font-size:15px;color:var(--c5);line-height:1.78;font-weight:500">${esc(u.experience)}</p></div>`:''}
+      ${u.works&&u.works.length?`<div class="card p-section" style="margin-bottom:12px"><div class="p-section-title">Selected Works</div>${u.works.map(w=>`<div class="work-item"><div class="work-item-title">${esc(w.title)}</div><div class="work-item-desc">${esc(w.desc)}</div></div>`).join('')}</div>`:''}
+      ${u.cvTips?`<div class="card p-section" style="margin-bottom:12px"><div class="p-section-title">CV and Interview Tips</div><p style="font-size:14px;color:var(--c5);line-height:1.75;font-weight:500">${esc(u.cvTips)}</p></div>`:''}
+      ${u.crossFuncTips?`<div class="card p-section" style="margin-bottom:12px"><div class="p-section-title">Cross-functional Tips</div><p style="font-size:14px;color:var(--c5);line-height:1.75;font-weight:500">${esc(u.crossFuncTips)}</p></div>`:''}
+      ${(u.links?.linkedin||u.links?.portfolio)?`<div class="card p-section" style="margin-bottom:12px"><div class="p-section-title">Links</div><div class="p-links">${u.links.linkedin?`<a class="p-link" href="${esc(u.links.linkedin)}" target="_blank">LinkedIn</a>`:''} ${u.links.portfolio?`<a class="p-link" href="${esc(u.links.portfolio)}" target="_blank">Portfolio</a>`:''}</div></div>`:''}
+    `:''}
+
+    ${(uPosts.length||commentedPosts.length)?`<div class="p-activity-grid" style="margin-top:4px;margin-bottom:14px">
+      ${uPosts.length?`<div class="activity-card"><div class="activity-card-hd">Posts by ${esc(u.username)} (${uPosts.length})</div><div class="activity-card-list">${sorted(uPosts).map(p=>{const cat=gCat(normCat(p.cat));return`<div class="activity-item" onclick="go('post',{id:'${p.id}',fromCat:'${normCat(p.cat)}'})"><div class="activity-item-title">${esc(p.title)}</div><div class="activity-item-meta">${esc(cat?.label||p.cat)}, ${fmtD(p.date)}, ${p.likes||0} likes</div></div>`}).join('')}</div></div>`:''}
+      ${commentedPosts.length?`<div class="activity-card"><div class="activity-card-hd">Discussions joined (${commentedPosts.length})</div><div class="activity-card-list">${sorted(commentedPosts).map(p=>{const uc=COMMENTS.find(c=>c.pid===p.id&&c.uid===uid&&!c.parent);return`<div class="activity-item" onclick="go('post',{id:'${p.id}',fromCat:'${normCat(p.cat)}'})"><div class="activity-item-title">${esc(p.title)}</div>${uc?`<div class="activity-item-meta" style="font-style:italic;margin-top:3px">"${esc(uc.body.substring(0,68))}${uc.body.length>68?'...':''}"</div>`:''}</div>`}).join('')}</div></div>`:''}
+    </div>`:''}
+
+    ${S.user&&!own&&(u.connections||[]).length>0?`
+    <div class="card p-section" style="margin-bottom:12px">
+      <div class="p-section-title">Connections (${(u.connections||[]).length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        ${(u.connections||[]).map(cid=>{const cu=gU(cid);if(!cu)return'';return`<div onclick="go('profile',{id:'${cid}'})" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r12);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--pbd)';this.style.background='var(--pbg)'" onmouseout="this.style.borderColor='var(--c2)';this.style.background='var(--c1)'"><div class="av av-sm" style="background:${avC(cu)}">${avI(cu)}</div><div><div style="font-weight:800;font-size:13px;color:var(--c6)">${esc(cu.username)}</div><div style="font-size:11.5px;color:var(--c4);font-weight:500">${esc(cu.jobTitle||'Researcher')}</div></div></div>`;}).join('')}
+      </div>
+    </div>`:''}
+    `:''}
+
+  </div></div>`;
+}
+
+/* ════════════════════════════════
+   VIEW: EDIT PROFILE
+════════════════════════════════ */
+function viewEditProfile(){
+  if(!S.user)return`<div class="wrap"><div class="empty"><div class="empty-title">Sign in to edit profile</div><button class="btn btn-p" onclick="showLogin()">Sign In</button></div></div>`;
+  const u=gU(S.user.id),tab=S.profileTab||'info';
+  return`<div class="create-page"><div class="wrap-md">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+      <div style="font-weight:900;font-size:clamp(22px,3vw,28px);color:var(--c6);letter-spacing:-.5px">Edit Profile</div>
+      <button class="btn btn-outline btn-sm" onclick="go('profile',{id:'${u.id}'})">View Profile</button>
+    </div>
+    <div class="ptabs">
+      <button class="ptab ${tab==='info'?'active':''}" onclick="S.profileTab='info';render()">Profile Info</button>
+      <button class="ptab ${tab==='works'?'active':''}" onclick="S.profileTab='works';render()">Selected Works</button>
+      <button class="ptab ${tab==='privacy'?'active':''}" onclick="S.profileTab='privacy';render()">Privacy</button>
+      <button class="ptab ${tab==='password'?'active':''}" onclick="S.profileTab='password';render()">Password</button>
+    </div>
+    ${tab==='info'?`<div class="card card-p"><div style="display:flex;flex-direction:column;gap:16px">
+      <div class="fg"><label class="flabel">Username</label><input class="finput" value="${esc(u.username)}" disabled style="opacity:.5;cursor:not-allowed"><span class="fhint">Username cannot be changed</span></div>
+      <div class="fg"><label class="flabel">Years of Work Experience<span class="req">*</span></label><input class="finput" id="pf-yow" type="number" min="0" max="60" value="${u.yearsOfWork||''}" placeholder="e.g. 5"></div>
+      <div class="fg"><label class="flabel">Job Title <span style="color:var(--c4);font-weight:500">(optional)</span></label><input class="finput" id="pf-title" value="${esc(u.jobTitle||'')}" placeholder="e.g. Senior UX Researcher"></div>
+      <div class="fg"><label class="flabel">Work Experience <span style="color:var(--c4);font-weight:500">(optional)</span></label><textarea class="ftextarea" id="pf-exp" style="min-height:100px" placeholder="Your professional background...">${esc(u.experience||'')}</textarea></div>
+      <div class="fg"><label class="flabel">CV and Interview Tips <span style="color:var(--c4);font-weight:500">(optional)</span></label><textarea class="ftextarea" id="pf-cv" style="min-height:90px" placeholder="Actionable tips...">${esc(u.cvTips||'')}</textarea></div>
+      <div class="fg"><label class="flabel">Cross-functional Tips <span style="color:var(--c4);font-weight:500">(optional)</span></label><textarea class="ftextarea" id="pf-cf" style="min-height:90px" placeholder="Tips for working with PMs, engineers...">${esc(u.crossFuncTips||'')}</textarea></div>
+      <div class="fg"><label class="flabel">LinkedIn URL <span style="color:var(--c4);font-weight:500">(optional)</span></label><input class="finput" id="pf-li" type="url" value="${esc(u.links?.linkedin||'')}" placeholder="https://linkedin.com/in/yourname"></div>
+      <div class="fg"><label class="flabel">Portfolio URL <span style="color:var(--c4);font-weight:500">(optional)</span></label><input class="finput" id="pf-port" type="url" value="${esc(u.links?.portfolio||'')}" placeholder="https://yourportfolio.com"></div>
+      <button class="btn btn-p" onclick="saveProfile()">Save Changes</button>
+    </div></div>`:''}
+    ${tab==='works'?`<div class="card card-p">
+      <p style="font-size:13.5px;color:var(--c5);margin-bottom:18px;line-height:1.6;font-weight:500">Showcase 3 to 5 case studies. Visible to connected users.</p>
+      ${(u.works||[]).map((w,i)=>`<div style="background:var(--c1);border-radius:var(--r12);border:1.5px solid var(--c2);padding:14px 18px;margin-bottom:10px">
+        <div class="fg" style="margin-bottom:9px"><label class="flabel">Project Title</label><input class="finput" id="wt-${i}" value="${esc(w.title)}" placeholder="Study or project name"></div>
+        <div class="fg" style="margin-bottom:9px"><label class="flabel">Description</label><textarea class="ftextarea" id="wd-${i}" style="min-height:72px" placeholder="Your role, methods, and impact...">${esc(w.desc)}</textarea></div>
+        <button class="btn btn-danger btn-xs" onclick="removeWork(${i})">Remove</button>
+      </div>`).join('')}
+      ${(u.works||[]).length<5?`<button class="btn btn-outline btn-sm" style="margin-bottom:18px" onclick="addWork()">Add Case Study</button>`:''}
+      <button class="btn btn-p" onclick="saveWorks()">Save Works</button>
+    </div>`:''}
+    ${tab==='privacy'?`<div class="card card-p">
+      <div style="font-weight:900;font-size:16px;color:var(--c6);margin-bottom:5px">Profile Visibility</div>
+      <p style="font-size:13.5px;color:var(--c5);margin-bottom:18px;line-height:1.6;font-weight:500">Non-connected users always see your username, years of experience, and job title.</p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px">
+        <label class="report-opt ${u.privacy==='connections'?'sel':''}"><input type="radio" name="pfp" value="connections" ${u.privacy==='connections'?'checked':''} style="accent-color:var(--p)"><div><div style="font-weight:800;font-size:13.5px;margin-bottom:2px">Connected users only (recommended)</div><div style="font-size:12px;color:var(--c4);font-weight:500">Only people you're connected with can view your full profile</div></div></label>
+        <label class="report-opt ${u.privacy==='public'?'sel':''}"><input type="radio" name="pfp" value="public" ${u.privacy==='public'?'checked':''} style="accent-color:var(--p)"><div><div style="font-weight:800;font-size:13.5px;margin-bottom:2px">All signed-in users</div><div style="font-size:12px;color:var(--c4);font-weight:500">Any logged-in member can view your full profile</div></div></label>
+      </div>
+      <button class="btn btn-p" onclick="saveProfile()">Save Privacy Settings</button>
+    </div>`:''}
+    ${tab==='password'?`<div class="card card-p">
+      <div style="font-weight:900;font-size:16px;color:var(--c6);margin-bottom:18px">Change Password</div>
+      <div style="display:flex;flex-direction:column;gap:14px;max-width:380px">
+        <div class="fg"><label class="flabel">Current Password</label><input class="finput" id="pw-cur" type="password"></div>
+        <div class="fg"><label class="flabel">New Password</label><input class="finput" id="pw-new" type="password" placeholder="At least 6 characters"></div>
+        <div class="fg"><label class="flabel">Confirm New Password</label><input class="finput" id="pw-cf" type="password"></div>
+        <button class="btn btn-p" onclick="changePw()">Update Password</button>
+      </div>
+    </div>`:''}
+  </div></div>`;
+}
+
+/* ════════════════════════════════
+   VIEW: ABOUT
+════════════════════════════════ */
+function viewAbout(){
+  return`<div class="about-page"><div class="wrap-sm">
+    <div class="about-top">
+      <div class="about-top-inner">
+        <div class="logo lg" style="margin:0 auto 20px;display:inline-flex"><span class="logo-we">we</span><span class="logo-loopin">loopin</span></div>
+        <h1>A place where researchers <em>speak freely.</em></h1>
+        <p style="margin-top:12px">Real experiences. Honest conversations. No performance. WeLoopin exists because the most valuable career insights happen in private, and they shouldn't have to.</p>
+      </div>
+    </div>
+
+    <div class="card about-section" style="margin-bottom:12px">
+      <h2>What WeLoopin is for</h2>
+      <p>WeLoopin is for researchers at every stage of their career. It's a place to share observations from your sector, ask questions you can't ask on LinkedIn, process difficult professional moments, and learn from people who've genuinely been through it.</p>
+      <p>Browse without signing up. Like and comment freely. Share anonymously if you need to. Sign up only if you want to build a profile and connect with others.</p>
+    </div>
+
+    <div class="card about-section" style="margin-bottom:12px">
+      <h2>Our community values</h2>
+      <div class="values-grid">
+        <div class="value-card"><div class="value-card-title">Honesty over polish</div><p>Raw, real accounts of what happened are more useful than perfectly packaged stories.</p></div>
+        <div class="value-card"><div class="value-card-title">Generosity by default</div><p>We share what we know. We answer questions. We remember that someone shared with us first.</p></div>
+        <div class="value-card"><div class="value-card-title">Critique the system</div><p>We talk about toxic cultures and broken processes. We never target individuals by name.</p></div>
+        <div class="value-card"><div class="value-card-title">No hierarchy of experience</div><p>Junior insights are as welcome as senior ones. Every perspective has something to teach.</p></div>
+      </div>
+    </div>
+
+    <div class="card about-section" style="margin-bottom:12px">
+      <h2>Four topics, one community</h2>
+      <div class="about-cats-list">
+        ${CATS.map((c,i)=>{
+          const bg=['#CBDBEE','#FBDCF8','#FFF8E0','#FED6C0'][i];
+          const bd=[`var(--cat1bd)`,`var(--cat2bd)`,`var(--cat3bd)`,`var(--cat4bd)`][i];
+          const tx=[`var(--cat1tx)`,`var(--cat2tx)`,`var(--cat3tx)`,`var(--cat4tx)`][i];
+          const stk=['#2E6DA4','#9B3DB5','#8A6500','#C25A1A'][i];
+          const iconPath={
+            'job-readiness':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 12h20"/>',
+            'career-traps':'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            'career-opportunities':'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/>',
+            'career-acceleration':'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+          }[c.id]||'';
+          return`<div class="about-cat-item" style="background:${bg};border:1.5px solid ${bd};color:${tx}" onclick="go('category',{id:'${c.id}'})">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${stk}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${iconPath}</svg>
+              </div>
+              <div><h3 style="margin-bottom:3px">${c.label}</h3><p>${c.longDesc}</p></div>
+            </div>
+            <span style="font-size:18px;flex-shrink:0;margin-left:10px">&#8594;</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="card about-section" style="margin-bottom:12px">
+      <h2>What's welcome here, and what isn't</h2>
+      <div class="rules-grid">
+        <div class="rule-card ok"><div class="rule-card-title">This is a safe space for</div><p>Real stories from your career, messy bits included. Honest takes on workplace cultures and systems. Questions at any experience level. Career advice from lived experience. Posts shared anonymously, if that feels right.</p></div>
+        <div class="rule-card no"><div class="rule-card-title">Please don't</div><p>Attack or name specific people. Share confidential client or company data. Post content that's discriminatory. Spam or promote without adding real value. Present opinions as facts.</p></div>
+        <div class="rule-card ok"><div class="rule-card-title">Your privacy</div><p>You can like, comment, and share without an account. Your full profile is only visible to connected users by default. You control what others see.</p></div>
+        <div class="rule-card no"><div class="rule-card-title">Moderation</div><p>All reports are reviewed privately. Repeated violations result in account suspension. The Career Traps space is for genuine support, not venting without purpose.</p></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:40px 0">
+      ${S.user
+        ?`<div style="font-weight:900;font-size:21px;color:var(--c6);margin-bottom:8px;letter-spacing:-.3px">You're in the loop.</div><p style="color:var(--c4);margin-bottom:18px;font-weight:500">Go share something. Someone out there needs to read it.</p><button class="btn btn-p btn-lg" onclick="go('create-post')">Share your experience</button>`
+        :`<div style="font-weight:900;font-size:21px;color:var(--c6);margin-bottom:8px;letter-spacing:-.3px">Ready to join the loop?</div><p style="color:var(--c4);margin-bottom:18px;font-weight:500">Browse freely. Comment and like without signing up. Share anonymously.</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-p btn-lg" onclick="go('create-post')">Share anonymously</button><button class="btn btn-outline btn-lg" onclick="showSignup()">Join WeLoopin</button></div>`
+      }
+    </div>
+  </div></div>`;
+}
+
+/* ════════════════════════════════
+   VIEW: SUPPORT
+════════════════════════════════ */
+function viewSupport(){
+  return`<div class="support-page"><div class="wrap-sm">
+    <div style="text-align:center;margin-bottom:34px">
+      <div style="font-weight:900;font-size:clamp(26px,4vw,38px);color:var(--c6);letter-spacing:-.8px;margin-bottom:7px">We're here to help</div>
+      <p style="font-size:15px;color:var(--c4);font-weight:500">Got a question, spotted a bug, or have a suggestion? We read every message.</p>
+    </div>
+    <div class="card card-p-lg">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="fg"><label class="flabel">Your Name</label><input class="finput" id="sp-n" placeholder="How should we address you?"></div>
+        <div class="fg"><label class="flabel">Email<span class="req">*</span></label><input class="finput" id="sp-e" type="email" placeholder="Where should we reply?" value="${S.user?esc(S.user.email):''}"></div>
+        <div class="fg"><label class="flabel">Topic</label><select class="fselect" id="sp-t"><option value="">Select a topic...</option><option>Bug report</option><option>Feature request</option><option>Account help</option><option>Community guidelines question</option><option>Content moderation</option><option>Other</option></select></div>
+        <div class="fg"><label class="flabel">Message<span class="req">*</span></label><textarea class="ftextarea" id="sp-m" style="min-height:150px" placeholder="Describe your request or issue in detail."></textarea></div>
+        <button class="btn btn-p btn-lg" style="width:100%" onclick="submitSupport()">Send Message</button>
+        <p style="font-size:12px;color:var(--c4);text-align:center;font-weight:500">We aim to respond within 48 hours. Your message goes directly to our team at design.naodong@gmail.com</p>
+      </div>
+    </div>
+  </div></div>`;
+}
+function submitSupport(){
+  const em=(document.getElementById('sp-e')||{}).value?.trim(),msg=(document.getElementById('sp-m')||{}).value?.trim();
+  if(!em||!msg){toast('Please fill in your email and message','error');return}
+  toast('Message sent! We\'ll get back to you within 48 hours.','success',4500);
+  ['sp-n','sp-m'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+}
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+function renderFooter(){
+  return`<footer style="background:var(--c6);padding:36px 0">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px">
+      <div class="logo" onclick="go('home')" style="cursor:pointer"><span class="logo-we" style="color:var(--p2)">we</span><span class="logo-loopin" style="color:var(--s2)">loopin</span></div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        ${CATS.map(c=>`<button style="background:transparent;border:none;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer;font-family:var(--font);font-weight:700;transition:color .13s" onmouseover="this.style.color='var(--p2)'" onmouseout="this.style.color='rgba(255,255,255,.35)'" onclick="go('category',{id:'${c.id}'})">${c.short}</button>`).join('')}
+        <button style="background:transparent;border:none;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer;font-family:var(--font);font-weight:700" onmouseover="this.style.color='var(--p2)'" onmouseout="this.style.color='rgba(255,255,255,.35)'" onclick="go('about')">About</button>
+        <button style="background:transparent;border:none;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer;font-family:var(--font);font-weight:700" onmouseover="this.style.color='var(--p2)'" onmouseout="this.style.color='rgba(255,255,255,.35)'" onclick="go('support')">Support</button>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,.32);font-weight:500;text-align:right;line-height:1.6">
+        &copy; 2025 WeLoopin. All rights reserved.<br>
+        <span style="color:rgba(255,255,255,.20)">Community content belongs to its respective authors.</span>
+      </div>
+    </div>
+  </footer>`;
+}
+
+/* ════════════════════════════════
+   RENDER
+════════════════════════════════ */
+function render(){
+  renderNav();
+  let html='';
+  switch(S.view){
+    case'home':         html=viewHome();break;
+    case'category':     html=viewCategory();break;
+    case'post':         html=viewPost();break;
+    case'create-post':  html=viewCreate();break;
+    case'profile':      html=viewProfile();break;
+    case'edit-profile': html=viewEditProfile();break;
+    case'about':        html=viewAbout();break;
+    case'support':      html=viewSupport();break;
+    default:            html=viewHome();
+  }
+  document.getElementById('app').innerHTML=html+renderFooter();
+  if(S.view==='create-post')renderTags();
+}
+
+document.addEventListener('click',e=>{
+  if(S.userMenuOpen&&!e.target.closest('.u-wrap')){S.userMenuOpen=false;renderNav()}
+  if(mobileMenuOpen&&!e.target.closest('.mobile-drawer-panel')&&!e.target.closest('.nav-hamburger')){closeMobileMenu()}
+});
+
+render();
+</script>
+</body>
+</html>
