@@ -197,7 +197,7 @@ input,textarea,select{font-family:var(--font);outline:none;color:var(--c6)}
 .anon-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.13);color:#fff;border-radius:var(--rFull);padding:6px 16px;font-size:12.5px;font-weight:800;margin-bottom:20px}
 .anon-pill svg{color:var(--s);flex-shrink:0}
 .share-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.share-btn-wh{background:var(--s);color:var(--c6);border:none;border-radius:var(--rFull);padding:0 32px;height:54px;font-weight:900;font-size:16px;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(255,212,59,.32);font-family:var(--font);letter-spacing:-.2px}
+.share-btn-wh{background:var(--s);color:var(--c6);border:none;border-radius:var(--rFull);padding:0 32px;height:54px;font-weight:650;font-size:16px;cursor:pointer;transition:all .2s;box-shadow:0 6px 24px rgba(255,212,59,.32);font-family:var(--font);letter-spacing:.1px}
 .share-btn-wh:hover{background:var(--s2);transform:translateY(-3px);box-shadow:0 10px 30px rgba(255,212,59,.40)}
 .share-signin-btn{background:rgba(255,255,255,.14);color:#fff;border:2px solid rgba(255,255,255,.36);border-radius:var(--rFull);padding:0 22px;height:54px;font-weight:800;font-size:14px;cursor:pointer;transition:all .18s;font-family:var(--font)}
 .share-signin-btn:hover{background:rgba(255,255,255,.24);transform:translateY(-2px)}
@@ -598,6 +598,18 @@ input,textarea,select{font-family:var(--font);outline:none;color:var(--c6)}
 .notif-empty{padding:28px 16px;text-align:center;color:var(--c4);font-size:13.5px;font-weight:500}
 /* ── DRAFT PILL ──────────────────── */
 .draft-pill{display:inline-flex;align-items:center;gap:5px;background:var(--sbg);color:var(--sd);border:1.5px solid var(--sbd);border-radius:var(--rFull);font-size:11.5px;font-weight:800;padding:3px 10px}
+/* ── SEARCH ──────────────────────── */
+.search-wrap{position:relative;max-width:640px;margin:0 auto}
+.search-input{width:100%;background:var(--c0);border:2px solid var(--c2);border-radius:var(--rFull);padding:14px 52px 14px 50px;font-size:15px;font-weight:600;color:var(--c6);font-family:var(--font);transition:all .18s;box-shadow:0 2px 12px rgba(44,44,58,.06)}
+.search-input:focus{border-color:var(--p);box-shadow:0 0 0 4px rgba(136,101,255,.12);outline:none}
+.search-input::placeholder{color:var(--c4);font-weight:500}
+.search-icon{position:absolute;left:17px;top:50%;transform:translateY(-50%);pointer-events:none}
+.search-icon svg{width:20px;height:20px;stroke:var(--c4);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.search-input:focus~.search-icon svg,.search-wrap:focus-within .search-icon svg{stroke:var(--p)}
+.search-clear{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:var(--c2);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;display:none;align-items:center;justify-content:center;color:var(--c5);font-size:14px;line-height:1;font-family:var(--font)}
+.search-clear.visible{display:flex}
+.search-clear:hover{background:var(--c3)}
+.search-results-strip{font-size:13px;color:var(--c4);font-weight:600;margin-bottom:8px;padding-top:4px}
 </style>
 </head>
 <body>
@@ -643,23 +655,23 @@ input,textarea,select{font-family:var(--font);outline:none;color:var(--c6)}
    CATEGORIES
 ════════════════════════════════ */
 const CATS=[
-  {id:'job-readiness',     label:'Job Readiness',      short:'Job Readiness',
-   sub:['job-application','interview-preparation','onboarding-preparation'],
-   desc:'CVs, interview prep, and landing strong in a new role.',
-   hero:'Everything you need to get hired and hit the ground running.',
-   longDesc:'From writing a CV that actually gets read, to acing every interview, to making a great first impression in your first 90 days.',
-   cc:'cc-1', clh:'clh-1', badge:'badge-c1', aci:'aci-1'},
-  {id:'career-traps',      label:'Career Traps',        short:'Career Traps',
-   sub:['career-sinkhole'],
-   desc:'Toxic workplaces, burnout, dead-end roles, and early warning signs.',
-   hero:'Naming the situations no one talks about openly, and how to get out.',
-   longDesc:'Spotting a sinking ship, knowing when to leave, and rebuilding your confidence after a difficult chapter. You\'re not alone in this.',
-   cc:'cc-2', clh:'clh-2', badge:'badge-c2', aci:'aci-2'},
   {id:'career-opportunities',label:'Career Opportunities',short:'Opportunities',
    sub:['career-opportunities'],
    desc:'Job leads, sector moves, transitions, and the next right thing.',
    hero:'How to find the move you actually want, and position yourself for it.',
    longDesc:'Where to look, how to look, and how to position yourself for the career move you actually want. Transitions, pivots, and new directions.',
+   cc:'cc-1', clh:'clh-1', badge:'badge-c1', aci:'aci-1'},
+  {id:'job-readiness',     label:'Job Readiness',      short:'Job Readiness',
+   sub:['job-application','interview-preparation','onboarding-preparation'],
+   desc:'CVs, interview prep, and landing strong in a new role.',
+   hero:'Everything you need to get hired and hit the ground running.',
+   longDesc:'From writing a CV that actually gets read, to acing every interview, to making a great first impression in your first 90 days.',
+   cc:'cc-2', clh:'clh-2', badge:'badge-c2', aci:'aci-2'},
+  {id:'career-traps',      label:'Career Traps',        short:'Career Traps',
+   sub:['career-sinkhole'],
+   desc:'Toxic workplaces, burnout, dead-end roles, and early warning signs.',
+   hero:'Naming the situations no one talks about openly, and how to get out.',
+   longDesc:'Spotting a sinking ship, knowing when to leave, and rebuilding your confidence after a difficult chapter. You\'re not alone in this.',
    cc:'cc-3', clh:'clh-3', badge:'badge-c3', aci:'aci-3'},
   {id:'career-acceleration',label:'Career Acceleration', short:'Acceleration',
    sub:['professional-development'],
@@ -752,7 +764,7 @@ let NOTIFICATIONS=[];  /* {id, type, msg, pid, fromUid, read, date} */
 let S={
   user:null, view:'home', params:{}, sortBy:'date',
   profileTab:'info', profileViewTab:'overview', userMenuOpen:false,
-  notifOpen:false, cp:{cat:'',title:'',body:'',tags:[]},
+  notifOpen:false, searchQ:'', cp:{cat:'',title:'',body:'',tags:[]},
 };
 
 /* ════════════════════════════════
@@ -817,7 +829,10 @@ function showLogin(){
       <button class="btn btn-p btn-lg" style="width:100%;margin-top:4px" onclick="doLogin()">Sign In</button>
     </div>
     <p style="font-size:11.5px;color:var(--c4);text-align:center;margin-top:11px;line-height:1.5">Demo accounts: lulu@weloopin.com / alex@example.com / maya@example.com — password: demo123</p>
-    <div style="text-align:center;margin-top:12px;font-size:13.5px;color:var(--c4);font-weight:600">New here? <button class="btn-link" onclick="showSignup()">Join for free</button></div>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--pbg);border-radius:var(--r16);border:1.5px solid var(--pbd);text-align:center">
+      <div style="font-size:13px;color:var(--c5);font-weight:600;margin-bottom:8px">New to WeLoopin?</div>
+      <button class="btn btn-p-outline" style="width:100%;height:40px;font-size:14px" onclick="showSignup()">Create a free account</button>
+    </div>
   `);
 }
 
@@ -1134,26 +1149,45 @@ function renderNotifBell(){
   if(!S.user){wrap.style.display='none';return}
   wrap.style.display='block';
   const count=unreadCount();
+
+  const typeIcon={
+    'like':'<svg width="16" height="16" viewBox="0 0 24 24" fill="var(--danger)" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    'comment':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--p)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    'new-post':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+    'default':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--c4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+  };
+
+  const notifRows=NOTIFICATIONS.slice(0,20).map(n=>`
+    <div class="notif-item ${n.read?'':'unread'}" onclick="notifClick('${n.id}','${n.pid||''}')">
+      <div style="width:32px;height:32px;border-radius:50%;background:${n.read?'var(--c1)':'var(--pbg)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        ${typeIcon[n.type]||typeIcon['default']}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="notif-text">${esc(n.msg)}</div>
+        <div class="notif-time">${ago(n.date)}</div>
+      </div>
+      ${!n.read?`<div class="notif-dot" style="flex-shrink:0;margin-top:6px"></div>`:''}
+    </div>`).join('');
+
   wrap.innerHTML=`
-    <button class="notif-btn" onclick="toggleNotif()" title="Notifications">
+    <button class="notif-btn" onclick="toggleNotif()" title="Notifications" aria-expanded="${S.notifOpen}">
       <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
     </button>
     ${count>0?`<span class="notif-badge">${count>9?'9+':count}</span>`:''}
     <div class="notif-panel ${S.notifOpen?'open':''}">
       <div class="notif-panel-hd">
-        <span class="notif-panel-title">Notifications ${count>0?`<span style="color:var(--danger);font-size:12px">(${count} new)</span>`:''}</span>
-        ${NOTIFICATIONS.length>0?`<button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>`:''}
+        <span class="notif-panel-title">Notifications${count>0?` <span style="background:var(--danger);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;padding:1px 6px;margin-left:4px">${count}</span>`:''}
+        </span>
+        ${NOTIFICATIONS.length>0?`<button class="notif-mark-all" onclick="event.stopPropagation();markAllRead()">Mark all read</button>`:''}
       </div>
       <div class="notif-list">
-        ${NOTIFICATIONS.length===0?`<div class="notif-empty">No notifications yet</div>`
-          :NOTIFICATIONS.slice(0,20).map(n=>`
-          <div class="notif-item ${n.read?'':'unread'}" onclick="notifClick('${n.id}','${n.pid||''}')">
-            <div class="notif-dot ${n.read?'read':''}"></div>
-            <div>
-              <div class="notif-text">${esc(n.msg)}</div>
-              <div class="notif-time">${ago(n.date)}</div>
-            </div>
-          </div>`).join('')}
+        ${NOTIFICATIONS.length===0
+          ?`<div class="notif-empty">
+              <div style="font-size:28px;margin-bottom:8px">🔔</div>
+              <div style="font-weight:700;color:var(--c6);margin-bottom:4px">All quiet for now</div>
+              <div style="font-size:12.5px">You'll be notified when someone likes or comments on your posts, or when a connection shares something new.</div>
+            </div>`
+          :notifRows}
       </div>
     </div>`;
 }
@@ -1386,10 +1420,23 @@ function cmtList(cmts,pid){
    VIEW: HOME
 ════════════════════════════════ */
 function viewHome(){
-  const posts=sorted(POSTS);
+  const q=(S.searchQ||'').trim().toLowerCase();
+  const allPosts=sorted(POSTS);
+  const posts=q?allPosts.filter(p=>p.title.toLowerCase().includes(q)||(p.content||'').toLowerCase().includes(q)||(p.tags||[]).some(t=>t.includes(q))||(gCat(normCat(p.cat))?.label||'').toLowerCase().includes(q)):allPosts;
   setTimeout(()=>showBackToTop(true),0);
   return`
+    <!-- SEARCH BAR -->
     <div style="padding:28px 0 0">
+      <div class="wrap">
+        <div class="search-wrap">
+          <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input class="search-input" id="mainSearch" type="search" placeholder="Search posts, topics, tags…" value="${esc(S.searchQ||'')}" oninput="S.searchQ=this.value;document.getElementById('sch-clear').classList.toggle('visible',!!this.value);renderHomeFeed()" autocomplete="off">
+          <button class="search-clear ${q?'visible':''}" id="sch-clear" onclick="S.searchQ='';document.getElementById('mainSearch').value='';document.getElementById('sch-clear').classList.remove('visible');renderHomeFeed()">&#215;</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:20px 0 0">
       <div class="wrap">
         <div class="share-section">
           <div class="ss-blob3"></div>
@@ -2029,6 +2076,7 @@ function renderFooter(){
 /* ════════════════════════════════
    RENDER
 ════════════════════════════════ */
+function renderHomeFeed(){render();}
 function render(){
   renderNav();
   let html='';
