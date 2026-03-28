@@ -573,6 +573,31 @@ input,textarea,select{font-family:var(--font);outline:none;color:var(--c6)}
   .cat-cards-grid{gap:10px}
   .values-grid{grid-template-columns:1fr}
 }
+/* ── NOTIFICATIONS ───────────────── */
+.notif-wrap{position:relative}
+.notif-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid var(--c2);background:var(--c0);transition:all .15s;flex-shrink:0}
+.notif-btn:hover{border-color:var(--p);background:var(--pbg)}
+.notif-btn svg{width:18px;height:18px;stroke:var(--c5);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.notif-badge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;background:var(--danger);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--c0)}
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:320px;background:var(--c0);border:1.5px solid var(--c2);border-radius:var(--r20);box-shadow:var(--sh-lg);overflow:hidden;display:none;animation:dropIn .16s ease;z-index:901}
+.notif-panel.open{display:block}
+.notif-panel-hd{padding:13px 16px;border-bottom:1.5px solid var(--c2);display:flex;align-items:center;justify-content:space-between}
+.notif-panel-title{font-weight:900;font-size:14px;color:var(--c6)}
+.notif-mark-all{font-size:12px;font-weight:700;color:var(--p);cursor:pointer;background:none;border:none;font-family:var(--font)}
+.notif-mark-all:hover{text-decoration:underline}
+.notif-list{max-height:340px;overflow-y:auto}
+.notif-item{padding:11px 16px;border-bottom:1.5px solid var(--c2);cursor:pointer;transition:background .12s;display:flex;gap:10px;align-items:flex-start}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--pbg)}
+.notif-item.unread{background:var(--pbg)}
+.notif-item.unread:hover{background:var(--pbd)}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--p);flex-shrink:0;margin-top:5px}
+.notif-dot.read{background:transparent}
+.notif-text{font-size:13px;color:var(--c6);font-weight:600;line-height:1.45;flex:1}
+.notif-time{font-size:11px;color:var(--c4);font-weight:500;margin-top:2px}
+.notif-empty{padding:28px 16px;text-align:center;color:var(--c4);font-size:13.5px;font-weight:500}
+/* ── DRAFT PILL ──────────────────── */
+.draft-pill{display:inline-flex;align-items:center;gap:5px;background:var(--sbg);color:var(--sd);border:1.5px solid var(--sbd);border-radius:var(--rFull);font-size:11.5px;font-weight:800;padding:3px 10px}
 </style>
 </head>
 <body>
@@ -588,6 +613,7 @@ input,textarea,select{font-family:var(--font);outline:none;color:var(--c6)}
     <button id="navAbout" class="nav-about" onclick="go('about')">About</button>
     <div class="nav-cats" id="navCats"></div>
     <div class="nav-sp"></div>
+    <div id="notifWrap" class="notif-wrap" style="display:none"></div>
     <div id="navActs" class="nav-acts"></div>
     <!-- Hamburger (mobile only) -->
     <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -717,12 +743,16 @@ let COMMENTS=[
   {id:'ca9',pid:'p21',uid:'u5',parent:null,body:'The distinction between deficit framing and genuine empathy is something I\'ve been trying to articulate for years and never found the words for. "Centring the researcher\'s curiosity rather than the participant\'s experience" is exactly it.',date:'2025-03-21',likes:24,likedBy:[]},
 ];
 
+let DRAFTS=[];   /* {id, title, body, cat, tags, savedAt} — per logged-in user */
+let NOTIFICATIONS=[];  /* {id, type, msg, pid, fromUid, read, date} */
+
 /* ════════════════════════════════
    STATE
 ════════════════════════════════ */
 let S={
   user:null, view:'home', params:{}, sortBy:'date',
-  profileTab:'info', profileViewTab:'overview', userMenuOpen:false, cp:{cat:'',title:'',body:'',tags:[]},
+  profileTab:'info', profileViewTab:'overview', userMenuOpen:false,
+  notifOpen:false, cp:{cat:'',title:'',body:'',tags:[]},
 };
 
 /* ════════════════════════════════
@@ -866,8 +896,20 @@ function likePost(id){
   const p=gP(id);if(!p)return;if(!p.likedBy)p.likedBy=[];
   const key='wl_lp_'+id;
   const liked=S.user?p.likedBy.includes(S.user.id):!!sessionStorage.getItem(key);
-  if(liked){if(S.user){const i=p.likedBy.indexOf(S.user.id);p.likedBy.splice(i,1)}else sessionStorage.removeItem(key);p.likes=Math.max(0,(p.likes||1)-1)}
-  else{if(S.user)p.likedBy.push(S.user.id);else sessionStorage.setItem(key,'1');p.likes=(p.likes||0)+1}
+  if(liked){
+    if(S.user){const i=p.likedBy.indexOf(S.user.id);p.likedBy.splice(i,1)}
+    else sessionStorage.removeItem(key);
+    p.likes=Math.max(0,(p.likes||1)-1);
+  } else {
+    if(S.user)p.likedBy.push(S.user.id);
+    else sessionStorage.setItem(key,'1');
+    p.likes=(p.likes||0)+1;
+    // notify post author
+    if(S.user&&p.author!==S.user.id&&p.author!=='u_guest'){
+      const title=p.title.substring(0,40)+(p.title.length>40?'...':'');
+      pushNotif('like',`${S.user.username} liked your post: "${title}"`,id,S.user.id);
+    }
+  }
   render();
 }
 function likeComment(id){
@@ -884,15 +926,6 @@ function likeComment(id){
 ════════════════════════════════ */
 function ensureGuest(){if(!gU('u_guest'))USERS.push({id:'u_guest',username:'anonymous',email:'',pw:'',yearsOfWork:0,jobTitle:'',experience:'',works:[],cvTips:'',crossFuncTips:'',links:{linkedin:'',portfolio:''},privacy:'public',isFounder:false,joined:'2025-01-01',connections:[]})}
 
-function deleteComment(id){
-  if(!S.user)return;
-  const c=COMMENTS.find(x=>x.id===id);if(!c||c.uid!==S.user.id){toast('You can only delete your own comments','error');return}
-  const pid=c.pid;const toRm=[id,...COMMENTS.filter(x=>x.parent===id).map(x=>x.id)];
-  toRm.forEach(rid=>{const i=COMMENTS.findIndex(x=>x.id===rid);if(i>-1)COMMENTS.splice(i,1)});
-  const p=gP(pid);if(p)p.cids=(p.cids||[]).filter(cid=>!toRm.includes(cid));
-  toast('Comment deleted','info');refreshCmts(pid);
-}
-
 function submitComment(pid,parentId=null){
   const ta=document.getElementById(parentId?'rta-'+parentId:'cta-'+pid);if(!ta)return;
   const body=ta.value.trim();if(!body){toast('Please write something first','error');return}
@@ -900,6 +933,12 @@ function submitComment(pid,parentId=null){
   const authorId=S.user?S.user.id:'u_guest';
   const nc={id:uid('c'),pid,uid:authorId,parent:parentId,body,date:new Date().toISOString().split('T')[0],likes:0,likedBy:[]};
   COMMENTS.push(nc);const p=gP(pid);if(p){if(!p.cids)p.cids=[];p.cids.push(nc.id)}
+  // notify post author if different user
+  if(p&&p.author!==authorId&&p.author!=='u_guest'&&S.user){
+    const commenter=S.user.username;
+    const title=p.title.substring(0,40)+(p.title.length>40?'...':'');
+    pushNotif('comment',`${commenter} commented on your post: "${title}"`,pid,authorId);
+  }
   ta.value='';if(parentId)toggleReply(parentId,false);
   toast('Comment posted!','success');refreshCmts(pid);
 }
@@ -943,6 +982,14 @@ function submitPost(){
   ensureGuest();
   const np={id:uid('p'),title,content:body,cat:S.cp.cat,tags:S.cp.tags,author:S.user?S.user.id:'u_guest',date:new Date().toISOString().split('T')[0],likes:0,likedBy:[],cids:[]};
   POSTS.unshift(np);S.cp={cat:'',title:'',body:'',tags:[]};
+  // notify connections about new post
+  if(S.user){
+    const connections=gU(S.user.id)?.connections||[];
+    const shortTitle=np.title.substring(0,40)+(np.title.length>40?'...':'');
+    connections.forEach(()=>{
+      pushNotif('new-post',`${S.user.username} shared a new post: "${shortTitle}"`,np.id,S.user.id);
+    });
+  }
   toast('Post is live!','success');go('post',{id:np.id,fromCat:np.cat});
 }
 
@@ -990,10 +1037,142 @@ function showReport(pid){
 function selR(el){document.querySelectorAll('.report-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel')}
 function submitReport(pid){const r=document.querySelector('input[name="rr"]:checked');if(!r){toast('Please select a reason','error');return}closeModal();toast('Report submitted. Thank you.','success',4000)}
 function deletePost(id){
-  if(!S.user)return;const p=gP(id);if(!p||p.author!==S.user.id){toast('You can only delete your own posts','error');return}
+  if(!S.user)return;
+  const p=gP(id);if(!p||p.author!==S.user.id){toast('You can only delete your own posts','error');return}
+  openModal(`<button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div style="font-weight:900;font-size:19px;color:var(--c6);margin-bottom:6px">Delete this post?</div>
+    <p style="font-size:14px;color:var(--c5);margin-bottom:20px;font-weight:500;line-height:1.6">This will permanently remove the post and all its comments. This cannot be undone.</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger" style="border-radius:var(--rFull);height:42px;padding:0 22px" onclick="confirmDeletePost('${id}')">Yes, delete it</button>
+    </div>`);
+}
+function confirmDeletePost(id){
+  const p=gP(id);if(!p)return;
   const catId=normCat(p.cat);
-  POSTS.splice(POSTS.findIndex(x=>x.id===id),1);COMMENTS.filter(c=>c.pid===id).forEach(c=>{COMMENTS.splice(COMMENTS.findIndex(x=>x.id===c.id),1)});
-  toast('Post deleted','info');go('category',{id:catId});
+  POSTS.splice(POSTS.findIndex(x=>x.id===id),1);
+  COMMENTS.filter(c=>c.pid===id).forEach(c=>{COMMENTS.splice(COMMENTS.findIndex(x=>x.id===c.id),1)});
+  closeModal();toast('Post deleted','info');go('category',{id:catId});
+}
+
+function deleteComment(id){
+  if(!S.user)return;
+  const c=COMMENTS.find(x=>x.id===id);if(!c||c.uid!==S.user.id){toast('You can only delete your own comments','error');return}
+  openModal(`<button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div style="font-weight:900;font-size:19px;color:var(--c6);margin-bottom:6px">Delete this comment?</div>
+    <p style="font-size:14px;color:var(--c5);margin-bottom:20px;font-weight:500;line-height:1.6">This will also remove any replies to it. This cannot be undone.</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger" style="border-radius:var(--rFull);height:42px;padding:0 22px" onclick="confirmDeleteComment('${id}')">Yes, delete it</button>
+    </div>`);
+}
+function confirmDeleteComment(id){
+  const c=COMMENTS.find(x=>x.id===id);if(!c)return;
+  const pid=c.pid;
+  const toRm=[id,...COMMENTS.filter(x=>x.parent===id).map(x=>x.id)];
+  toRm.forEach(rid=>{const i=COMMENTS.findIndex(x=>x.id===rid);if(i>-1)COMMENTS.splice(i,1)});
+  const p=gP(pid);if(p)p.cids=(p.cids||[]).filter(cid=>!toRm.includes(cid));
+  closeModal();toast('Comment deleted','info');refreshCmts(pid);
+}
+
+/* ════════════════════════════════
+   DRAFTS
+════════════════════════════════ */
+function saveDraft(){
+  if(!S.user){toast('Sign in to save drafts','info');S.cp={cat:'',title:'',body:'',tags:[]};go('home');return}
+  const title=(document.getElementById('cp-title')||{}).value?.trim()||S.cp.title;
+  const body=(document.getElementById('cp-body')||{}).value?.trim()||S.cp.body;
+  if(!title&&!body){S.cp={cat:'',title:'',body:'',tags:[]};go('home');return}
+  const d={id:uid('d'),userId:S.user.id,cat:S.cp.cat,title:title||'(Untitled)',body,tags:[...S.cp.tags],savedAt:new Date().toISOString()};
+  // replace existing draft if same id, else push
+  const i=DRAFTS.findIndex(x=>x.id===S.cp.draftId);
+  if(i>-1)DRAFTS[i]=d; else DRAFTS.push(d);
+  S.cp={cat:'',title:'',body:'',tags:[]};
+  toast('Draft saved','success');
+  go('profile',{id:S.user.id});
+}
+
+function discardConfirm(){
+  const title=(document.getElementById('cp-title')||{}).value?.trim()||S.cp.title;
+  const body=(document.getElementById('cp-body')||{}).value?.trim()||S.cp.body;
+  if(!title&&!body){S.cp={cat:'',title:'',body:'',tags:[]};go('home');return}
+  openModal(`<button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div style="font-weight:900;font-size:19px;color:var(--c6);margin-bottom:6px">Discard or save as draft?</div>
+    <p style="font-size:14px;color:var(--c5);margin-bottom:20px;font-weight:500;line-height:1.6">You have unsaved content. Would you like to save it as a draft or discard it entirely?</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-p" style="flex:1" onclick="closeModal();saveDraft()">Save as draft</button>
+      <button class="btn btn-danger" style="flex:1;border-radius:var(--rFull);height:42px" onclick="closeModal();S.cp={cat:'',title:'',body:'',tags:[]};go('home')">Discard</button>
+    </div>
+    <button class="btn-link" style="display:block;text-align:center;margin-top:14px;font-size:13.5px" onclick="closeModal()">Keep editing</button>`);
+}
+
+function loadDraft(draftId){
+  const d=DRAFTS.find(x=>x.id===draftId);if(!d)return;
+  S.cp={cat:d.cat,title:d.title,body:d.body,tags:[...d.tags],draftId:d.id};
+  go('create-post');
+}
+
+function deleteDraft(draftId,e){
+  e.stopPropagation();
+  const i=DRAFTS.findIndex(x=>x.id===draftId);if(i>-1)DRAFTS.splice(i,1);
+  toast('Draft deleted','info');render();
+}
+
+/* ════════════════════════════════
+   NOTIFICATIONS
+════════════════════════════════ */
+function pushNotif(type,msg,pid,fromUid){
+  NOTIFICATIONS.unshift({id:uid('n'),type,msg,pid,fromUid,read:false,date:new Date().toISOString()});
+  if(NOTIFICATIONS.length>50)NOTIFICATIONS.length=50;
+  renderNotifBell();
+}
+
+function unreadCount(){return NOTIFICATIONS.filter(n=>!n.read).length}
+
+function renderNotifBell(){
+  const wrap=document.getElementById('notifWrap');if(!wrap)return;
+  if(!S.user){wrap.style.display='none';return}
+  wrap.style.display='block';
+  const count=unreadCount();
+  wrap.innerHTML=`
+    <button class="notif-btn" onclick="toggleNotif()" title="Notifications">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+    ${count>0?`<span class="notif-badge">${count>9?'9+':count}</span>`:''}
+    <div class="notif-panel ${S.notifOpen?'open':''}">
+      <div class="notif-panel-hd">
+        <span class="notif-panel-title">Notifications ${count>0?`<span style="color:var(--danger);font-size:12px">(${count} new)</span>`:''}</span>
+        ${NOTIFICATIONS.length>0?`<button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>`:''}
+      </div>
+      <div class="notif-list">
+        ${NOTIFICATIONS.length===0?`<div class="notif-empty">No notifications yet</div>`
+          :NOTIFICATIONS.slice(0,20).map(n=>`
+          <div class="notif-item ${n.read?'':'unread'}" onclick="notifClick('${n.id}','${n.pid||''}')">
+            <div class="notif-dot ${n.read?'read':''}"></div>
+            <div>
+              <div class="notif-text">${esc(n.msg)}</div>
+              <div class="notif-time">${ago(n.date)}</div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function toggleNotif(){
+  S.notifOpen=!S.notifOpen;
+  if(S.notifOpen)S.userMenuOpen=false;
+  renderNotifBell();
+}
+
+function markAllRead(){
+  NOTIFICATIONS.forEach(n=>n.read=true);renderNotifBell();
+}
+
+function notifClick(nid,pid){
+  const n=NOTIFICATIONS.find(x=>x.id===nid);if(n)n.read=true;
+  S.notifOpen=false;
+  if(pid)go('post',{id:pid});
+  else renderNotifBell();
 }
 
 /* ════════════════════════════════
@@ -1141,8 +1320,10 @@ function renderNav(){
       <button class="btn btn-ghost btn-sm" onclick="showLogin()">Sign In</button>
       <button class="nav-share-btn" onclick="go('create-post')">Share experience</button>`;
   }
+  renderNotifBell();
 }
-function toggleUM(){S.userMenuOpen=!S.userMenuOpen;renderNav()}
+function toggleUM(){S.userMenuOpen=!S.userMenuOpen;S.notifOpen=false;renderNav()}
+function toggleNotifFromNav(){S.notifOpen=!S.notifOpen;S.userMenuOpen=false;renderNav()}
 
 /* ════════════════════════════════
    HELPERS
@@ -1485,7 +1666,7 @@ function viewCreate(){
     </div>
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button class="btn btn-outline" onclick="S.cp={cat:'',title:'',body:'',tags:[]};go('home')">Discard</button>
+      <button class="btn btn-outline" onclick="discardConfirm()">Discard</button>
       <button class="btn btn-p btn-lg" onclick="S.cp.title=document.getElementById('cp-title')?.value||S.cp.title;S.cp.body=document.getElementById('cp-body')?.value||S.cp.body;submitPost()">Publish</button>
     </div>
   </div></div>`;
@@ -1504,10 +1685,11 @@ function viewProfile(){
   const connectCount=(u.connections||[]).length;
   const fromPost=S.params.fromPost;
   const fromCat=S.params.fromCat;
-  // for own profile, allow tab switching between Overview and My Connections
+  // for own profile, allow tab switching
   const pvTab=own?S.profileViewTab||'overview':'overview';
-
   const connectionsList=(u.connections||[]).map(cid=>gU(cid)).filter(Boolean);
+  const myDrafts=own?DRAFTS.filter(d=>d.userId===uid):[];
+  const myFavs=own?POSTS.filter(p=>(p.likedBy||[]).includes(uid)):[];
 
   return`<div class="profile-page"><div class="wrap-md">
     <div class="breadcrumb">
@@ -1543,13 +1725,11 @@ function viewProfile(){
     </div>
 
     ${own?`
-    <!-- OWN PROFILE: tab strip -->
     <div class="ptabs" style="margin-bottom:20px">
       <button class="ptab ${pvTab==='overview'?'active':''}" onclick="S.profileViewTab='overview';render()">Overview</button>
-      <button class="ptab ${pvTab==='connections'?'active':''}" onclick="S.profileViewTab='connections';render()">
-        My Connections
-        ${connectCount>0?`<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--p);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;min-width:18px;height:18px;padding:0 5px;margin-left:6px">${connectCount}</span>`:''}
-      </button>
+      <button class="ptab ${pvTab==='connections'?'active':''}" onclick="S.profileViewTab='connections';render()">Connections${connectCount>0?`<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--p);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;min-width:18px;height:18px;padding:0 5px;margin-left:6px">${connectCount}</span>`:''}</button>
+      <button class="ptab ${pvTab==='drafts'?'active':''}" onclick="S.profileViewTab='drafts';render()">Drafts${myDrafts.length>0?`<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--sd);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;min-width:18px;height:18px;padding:0 5px;margin-left:6px">${myDrafts.length}</span>`:''}</button>
+      <button class="ptab ${pvTab==='favourites'?'active':''}" onclick="S.profileViewTab='favourites';render()">Favourites${myFavs.length>0?`<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--danger);color:#fff;border-radius:var(--rFull);font-size:10px;font-weight:900;min-width:18px;height:18px;padding:0 5px;margin-left:6px">${myFavs.length}</span>`:''}</button>
     </div>`:''}
 
     ${!canFull&&!own?`<div class="limited-notice">
@@ -1606,6 +1786,59 @@ function viewProfile(){
         ${(u.connections||[]).map(cid=>{const cu=gU(cid);if(!cu)return'';return`<div onclick="go('profile',{id:'${cid}'})" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--c1);border:1.5px solid var(--c2);border-radius:var(--r12);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--pbd)';this.style.background='var(--pbg)'" onmouseout="this.style.borderColor='var(--c2)';this.style.background='var(--c1)'"><div class="av av-sm" style="background:${avC(cu)}">${avI(cu)}</div><div><div style="font-weight:800;font-size:13px;color:var(--c6)">${esc(cu.username)}</div><div style="font-size:11.5px;color:var(--c4);font-weight:500">${esc(cu.jobTitle||'Researcher')}</div></div></div>`;}).join('')}
       </div>
     </div>`:''}
+    `:''}
+
+    ${own&&pvTab==='drafts'?`
+    <div style="margin-bottom:14px">
+      <div style="font-weight:900;font-size:17px;color:var(--c6);margin-bottom:3px">Drafts</div>
+      <div style="font-size:13px;color:var(--c4);font-weight:500">Only visible to you. Pick up where you left off.</div>
+    </div>
+    ${myDrafts.length===0?`
+      <div class="empty" style="padding:40px 24px">
+        <div style="font-size:36px;margin-bottom:10px">✏️</div>
+        <div class="empty-title">No drafts yet</div>
+        <div class="empty-desc">Start writing a post and save it as a draft to continue later.</div>
+        <button class="btn btn-p" onclick="go('create-post')">Start writing</button>
+      </div>`:`
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:40px">
+        ${myDrafts.map(d=>{
+          const cat=gCat(d.cat);
+          return`<div class="card card-p" style="cursor:pointer" onclick="loadDraft('${d.id}')">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+                  <span class="draft-pill">✏️ Draft</span>
+                  ${cat?`<span class="badge ${cat.badge}">${esc(cat.label)}</span>`:''}
+                </div>
+                <div style="font-weight:900;font-size:15px;color:var(--c6);margin-bottom:4px">${esc(d.title)}</div>
+                ${d.body?`<div style="font-size:13px;color:var(--c4);line-height:1.5">${esc(d.body.substring(0,100))}${d.body.length>100?'...':''}</div>`:''}
+                <div style="font-size:12px;color:var(--c4);margin-top:6px;font-weight:500">Saved ${ago(d.savedAt)}</div>
+              </div>
+              <div style="display:flex;gap:6px;flex-shrink:0">
+                <button class="btn btn-p btn-sm" onclick="event.stopPropagation();loadDraft('${d.id}')">Continue editing</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteDraft('${d.id}',event)">Delete</button>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`}
+    `:''}
+
+    ${own&&pvTab==='favourites'?`
+    <div style="margin-bottom:14px">
+      <div style="font-weight:900;font-size:17px;color:var(--c6);margin-bottom:3px">Favourites</div>
+      <div style="font-size:13px;color:var(--c4);font-weight:500">Posts you've liked — your personal reading list.</div>
+    </div>
+    ${myFavs.length===0?`
+      <div class="empty" style="padding:40px 24px">
+        <div style="font-size:36px;margin-bottom:10px">❤️</div>
+        <div class="empty-title">No favourites yet</div>
+        <div class="empty-desc">When you like a post, it'll be saved here so you can easily find it again.</div>
+        <button class="btn btn-p" onclick="go('home')">Browse posts</button>
+      </div>`:`
+      <div class="posts-grid" style="padding-bottom:40px">
+        ${myFavs.map(p=>postCard(p,true)).join('')}
+      </div>`}
     `:''}
 
   </div></div>`;
@@ -1816,6 +2049,7 @@ function render(){
 
 document.addEventListener('click',e=>{
   if(S.userMenuOpen&&!e.target.closest('.u-wrap')){S.userMenuOpen=false;renderNav()}
+  if(S.notifOpen&&!e.target.closest('.notif-wrap')){S.notifOpen=false;renderNotifBell()}
   if(mobileMenuOpen&&!e.target.closest('.mobile-drawer-panel')&&!e.target.closest('.nav-hamburger')){closeMobileMenu()}
 });
 
